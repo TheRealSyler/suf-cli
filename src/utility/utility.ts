@@ -45,8 +45,7 @@ export function getArgs() {
   const [, , ...args] = process.argv;
   let ARGS: string[] = [];
   args.forEach((arg, i) => {
-    arg = arg.toLowerCase();
-    ARGS[i] = arg === undefined ? '' : arg.toLowerCase();
+    ARGS[i] = arg.toLowerCase();
   });
   return ARGS;
 }

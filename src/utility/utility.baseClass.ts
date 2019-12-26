@@ -1,5 +1,3 @@
-import { State } from '../state';
-
 export class BaseCliClass {
   protected _res: null | (() => void) = null;
   public async res() {

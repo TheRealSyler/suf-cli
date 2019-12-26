@@ -1,9 +1,9 @@
-import { State } from '../state';
+import { State } from '../../state';
 import fetch from 'node-fetch';
-import { writeFile, promises } from 'fs';
-import { insertionMarker, getMarkedInput, getGenerated } from '../utility/utility.marker';
-import { logger } from '../logger';
-import { BaseCliClass } from '../utility/utility.baseClass';
+import { promises } from 'fs';
+import { insertionMarker, getMarkedInput, getGenerated } from '../../utility/utility.marker';
+import { logger } from '../../logger';
+import { BaseCliClass } from '../../utility/utility.baseClass';
 
 export class License extends BaseCliClass {
   constructor(private STATE: State) {
@@ -17,7 +17,7 @@ export class License extends BaseCliClass {
 
     const input = getMarkedInput(CONFIG.out, 'license');
 
-    const readmeText = 'Copyright (c) YEAR NAME Licensed under the TYPE license.'
+    const readmeText = `Copyright (c) YEAR NAME Licensed under the TYPE license.`
       .replace(/NAME/, CONFIG.name)
       .replace(/YEAR/, CONFIG.year)
       .replace(/TYPE/, license.spdx_id);

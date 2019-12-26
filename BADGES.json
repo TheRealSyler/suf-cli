@@ -1,8 +1,0 @@
-{
-  "name": "package.name",
-  "github": "TheRealSyler",
-  "repo": "package.name",
-  "out": "README.md",
-  "vscode": "",
-  "badges": ["npmV npm", "min bundle", "install package", "githubLastCommit github"]
-}

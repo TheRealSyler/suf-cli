@@ -1,12 +1,12 @@
 import { writeFile, promises } from 'fs';
-import { logger } from '../logger';
+import { logger } from '../../logger';
 
 import { Badges, Links } from './badges.types';
 
-import { BadgesConfig } from '../config';
-import { State } from '../state';
-import { getMarkedInput, insertionMarker, getGenerated } from '../utility/utility.marker';
-import { BaseCliClass } from '../utility/utility.baseClass';
+import { BadgesConfig } from '../../config';
+import { State } from '../../state';
+import { getMarkedInput, insertionMarker, getGenerated } from '../../utility/utility.marker';
+import { BaseCliClass } from '../../utility/utility.baseClass';
 
 const BADGES: Badges = {
   circleci: '/circleci/build/github/<GITHUB>/<REPO>',

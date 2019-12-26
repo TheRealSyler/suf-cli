@@ -1,5 +1,5 @@
-import { State } from '../state';
-import { Config } from '../config';
+import { State } from '../../state';
+import { Config } from '../../config';
 import { GenBadges } from '../badges/badges';
 import { TsDoc } from '../tsDoc/tsDoc';
 import { License } from '../licence/license';

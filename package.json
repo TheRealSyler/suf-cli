@@ -4,7 +4,7 @@
   "description": "Utility Cli",
   "main": "./dist/cli.js",
   "scripts": {
-    "prepack": "tsc -b && tdg --include 'types' && node ./dist/cli.js"
+    "prepack": "tsc -b && node ./dist/cli.js"
   },
   "author": "Syler",
   "license": "MIT",
