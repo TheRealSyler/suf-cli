@@ -1,10 +1,10 @@
 {
   "name": "suf-cli",
-  "version": "0.0.2",
+  "version": "0.0.6",
   "description": "Utility Cli",
   "main": "./dist/cli.js",
   "scripts": {
-    "prepack": "tsc -b && node ./dist/cli.js"
+    "prepack": "del ./dist && tsc -b && node ./dist/cli.js"
   },
   "author": "Syler",
   "license": "MIT",
@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@sorg/log": "^1.0.2",
+    "del-cli": "^3.0.0",
     "node-fetch": "^2.6.0",
     "suf-node": "^1.1.0",
     "ts-doc-gen": "^0.2.0",
@@ -28,7 +29,6 @@
   "devDependencies": {
     "@types/node": "^12.7.7",
     "@types/node-fetch": "^2.5.4",
-    "get-badges": "^0.1.1",
     "package-json-type": "^1.0.3",
     "tslib": "^1.10.0"
   }

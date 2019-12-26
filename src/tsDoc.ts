@@ -1,12 +1,12 @@
 import { Walk } from 'suf-node';
 import { readFileSync, writeFile, promises } from 'fs';
 import { basename } from 'path';
-import { logger } from '../../logger';
+import { logger } from './logger';
 
-import { State } from '../../state';
-import { TsDocConfig } from '../../config';
-import { getMarkedInput, getGenerated, insertionMarker } from '../../utility/utility.marker';
-import { BaseCliClass } from '../../utility/utility.baseClass';
+import { State } from './state';
+import { TsDocConfig } from './config';
+import { getMarkedInput, getGenerated, insertionMarker } from './utility.marker';
+import { BaseCliClass } from './utility.baseClass';
 
 const codeBlock = '```';
 export class TsDoc extends BaseCliClass {

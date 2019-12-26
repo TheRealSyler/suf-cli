@@ -1,4 +1,4 @@
-import { logger } from '../logger';
+import { logger } from './logger';
 import { promises } from 'fs';
 import { Exits } from 'suf-node';
 import { IPackageJson } from 'package-json-type';

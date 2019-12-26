@@ -1,9 +1,9 @@
-import { State } from '../../state';
+import { State } from './state';
 import fetch from 'node-fetch';
 import { promises } from 'fs';
-import { insertionMarker, getMarkedInput, getGenerated } from '../../utility/utility.marker';
-import { logger } from '../../logger';
-import { BaseCliClass } from '../../utility/utility.baseClass';
+import { insertionMarker, getMarkedInput, getGenerated } from './utility.marker';
+import { logger } from './logger';
+import { BaseCliClass } from './utility.baseClass';
 
 export class License extends BaseCliClass {
   constructor(private STATE: State) {

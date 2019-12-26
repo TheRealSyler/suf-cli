@@ -1,8 +1,8 @@
-import { State } from '../../state';
-import { Config } from '../../config';
-import { GenBadges } from '../badges/badges';
-import { TsDoc } from '../tsDoc/tsDoc';
-import { License } from '../licence/license';
+import { State } from './state';
+import { Config } from './config';
+import { GenBadges } from './badges';
+import { TsDoc } from './tsDoc';
+import { License } from './license';
 
 export class Default {
   constructor(private STATE: State) {

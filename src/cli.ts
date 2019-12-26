@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-import { GenBadges } from './modules/badges/badges';
-import { TsDoc } from './modules/tsDoc/tsDoc';
-import { getPackageJson, getArgs } from './utility/utility';
+import { GenBadges } from './badges';
+import { TsDoc } from './tsDoc';
+import { getPackageJson, getArgs } from './utility';
 import { getConfig } from './config';
 import { State } from './state';
-import { Default } from './modules/default/default';
-import { License } from './modules/licence/license';
+import { Default } from './default';
+import { License } from './license';
 
 (async () => {
   const args = getArgs();
