@@ -1,128 +1,66 @@
 export interface Badges {
-  /**
-   * circleCi build.
-   */
+  /** circleCi build. */
   circleci: '/circleci/build/github/<GITHUB>/<REPO>';
-  /**
-   * Vscode Extension Version.
-   */
+  /** Vscode Extension Version. */
   vscV: '/visual-studio-marketplace/v/<VSCODE>';
-  /**
-   * Vscode Extension downloads.
-   */
+  /** Vscode Extension downloads. */
   vscD: '/visual-studio-marketplace/d/<VSCODE>';
-  /**
-   * Vscode Extension installs.
-   */
+  /** Vscode Extension installs. */
   vscI: '/visual-studio-marketplace/i/<VSCODE>';
-  /**
-   * Vscode Extension ratings.
-   */
+  /** Vscode Extension ratings. */
   vscR: '/visual-studio-marketplace/r/<VSCODE>';
-  /**
-   * Bundlephobia Min.
-   */
+  /** Bundlephobia Min. */
   min: '/bundlephobia/min/<NAME>';
-  /**
-   * Bundlephobia Minzip.
-   */
+  /** Bundlephobia Minzip. */
   minzip: '/bundlephobia/minzip/<NAME>';
-  /**
-   * Packagephobia Install.
-   */
+  /** Packagephobia Install. */
   install: '/packagephobia/install/<NAME>';
-  /**
-   * Packagephobia Publish.
-   */
+  /** Packagephobia Publish. */
   publish: '/packagephobia/publish/<NAME>';
-  /**
-   * Npm Version.
-   */
+  /** Npm Version. */
   npmV: '/npm/v/<NAME>';
-  /**
-   * Npm Weekly Downloads.
-   */
+  /** Npm Weekly Downloads. */
   npmDW: '/npm/dw/<NAME>';
-  /**
-   * Npm Monthly Downloads.
-   */
+  /** Npm Monthly Downloads. */
   npmDM: '/npm/dm/<NAME>';
-  /**
-   * Npm Yearly Downloads.
-   */
+  /** Npm Yearly Downloads. */
   npmDY: '/npm/dy/<NAME>';
-  /**
-   * Npm Total Downloads.
-   */
+  /** Npm Total Downloads. */
   npmDT: '/npm/dt/<NAME>';
-  /**
-   * Npm Types.
-   */
+  /** Npm Types. */
   npmTypes: '/npm/types/<NAME>';
-  /**
-   * Npm License.
-   */
+  /** Npm License. */
   npmLicense: '/npm/license/<NAME>';
-  /**
-   * Npm Node.
-   */
+  /** Npm Node. */
   npmNode: '/npm/node/<NAME>';
-  /**
-   * Npm Dependents.
-   */
+  /** Npm Dependents. */
   npmDep: '/npm/dependents/<NAME>';
-  /**
-   * GitHub Followers.
-   */
+  /** GitHub Followers. */
   githubFollowers: '/github/followers/<GITHUB>';
-  /**
-   * GitHub Forks.
-   */
+  /** GitHub Forks. */
   githubForks: '/github/forks/<GITHUB>/<REPO>';
-  /**
-   * GitHub Starts.
-   */
+  /** GitHub Starts. */
   githubStars: '/github/stars/<GITHUB>/<REPO>';
-  /**
-   * GitHub Issues.
-   */
+  /** GitHub Issues. */
   githubIssues: '/github/issues/<GITHUB>/<REPO>';
-  /**
-   * GitHub Last Commit.
-   */
+  /** GitHub Last Commit. */
   githubLastCommit: '/github/last-commit/<GITHUB>/<REPO>';
-  /**
-   * Custom, usage example: badge=https://img.shields.io/badge/custom%2C-Badge-brightgreen.
-   */
+  /** Custom, usage example: badge=https://img.shields.io/badge/custom%2C-Badge-brightgreen. */
   badge: '<CUSTOM>';
 }
 export interface Links {
-  /**
-   * Npm package.
-   */
+  /** Npm package. */
   npm: 'https://www.npmjs.com/package/<NAME>';
-  /**
-   * Github Repo.
-   */
+  /** Github Repo. */
   github: 'https://github.com/<GITHUB>/<REPO>';
-  /**
-   * circleCi Repo Pipelines.
-   */
+  /** circleCi Repo Pipelines. */
   circleci: 'https://app.circleci.com/github/<GITHUB>/<REPO>/pipelines';
-  /**
-   * Visual Studio marketplace.
-   */
+  /** Visual Studio marketplace. */
   vscode: 'https://marketplace.visualstudio.com/items?itemName=<VSCODE>';
-  /**
-   * Bundlephobia Link.
-   */
+  /** Bundlephobia Link. */
   bundle: 'https://bundlephobia.com/result?p=<NAME>';
-  /**
-   * Packagephobia Link.
-   */
+  /** Packagephobia Link. */
   package: 'https://packagephobia.now.sh/result?p=<NAME>';
-  /**
-   * Custom, usage example: link=https://example.com.
-   */
+  /** Custom, usage example: link=https://example.com. */
   link: '<CUSTOM>';
 }

@@ -28,8 +28,9 @@ const Markers: MarkerTypes = {
       '<span id="BADGE_GENERATION_MARKER_0"></span>\n__INSERT_GENERATED__\n<span id="BADGE_GENERATION_MARKER_1"></span>'
   },
   license: {
-    regex: /<span id="LICENSE_GENERATION_MARKER_0">[\S\s]*<\/span>/,
-    marker: '<span id="LICENSE_GENERATION_MARKER_0">\n__INSERT_GENERATED__\n</span>'
+    regex: /<span id="LICENSE_GENERATION_MARKER_0"><\/span>[\S\s]*<span id="LICENSE_GENERATION_MARKER_1"><\/span>/,
+    marker:
+      '<span id="LICENSE_GENERATION_MARKER_0"></span>\n__INSERT_GENERATED__\n<span id="LICENSE_GENERATION_MARKER_1"></span>'
   }
 };
 

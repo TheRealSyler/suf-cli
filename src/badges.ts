@@ -1,12 +1,12 @@
 import { writeFile, promises } from 'fs';
 import { logger } from './logger';
 
-import { Badges, Links } from './badges.types';
+import { Badges, Links } from './badgeTypes';
 
-import { BadgesConfig } from './config';
 import { State } from './state';
 import { getMarkedInput, insertionMarker, getGenerated } from './utility.marker';
 import { BaseCliClass } from './utility.baseClass';
+import { BadgesModuleConfig } from './Modules';
 
 const BADGES: Badges = {
   circleci: '/circleci/build/github/<GITHUB>/<REPO>',
@@ -52,8 +52,7 @@ export class GenBadges extends BaseCliClass {
   }
 
   private async run() {
-    const CONFIG: BadgesConfig = (await this.STATE.getConfig('badges'))!;
-
+    const CONFIG: BadgesModuleConfig = (await this.STATE.getConfig('badges'))!;
     const generatedBadges = this.getBadges(CONFIG);
 
     const input = getMarkedInput(CONFIG.out, 'badges');
@@ -68,15 +67,15 @@ export class GenBadges extends BaseCliClass {
     }
   }
 
-  private getBadges(CONFIG: BadgesConfig) {
+  private getBadges(CONFIG: BadgesModuleConfig) {
     let out = '';
     for (const _badge of CONFIG.badges) {
       out += this.addBadge(_badge, CONFIG);
     }
-    return out;
+    return out.replace(/^ /, '');
   }
 
-  private addBadge(_badge: string, CONFIG: BadgesConfig): string {
+  private addBadge(_badge: string, CONFIG: BadgesModuleConfig): string {
     let customLink = '';
     if (/ link=.+/.test(_badge)) {
       customLink = _badge.replace(/.*?link=([^ ]*) ?.*/, '$1');
@@ -89,7 +88,7 @@ export class GenBadges extends BaseCliClass {
     const type = split[0] as keyof Badges;
     const link = split[1] as keyof Links;
     const params = split[2];
-    let baseLink = ' https://img.shields.io';
+    let baseLink = 'https://img.shields.io';
     switch (type) {
       case 'install':
       case 'npmDep':
@@ -111,7 +110,7 @@ export class GenBadges extends BaseCliClass {
     return '';
   }
 
-  private replacePlaceholders(CONFIG: BadgesConfig, text: string) {
+  private replacePlaceholders(CONFIG: BadgesModuleConfig, text: string) {
     text = text.replace(/<NAME>/g, CONFIG.name);
     text = text.replace(/<GITHUB>/g, CONFIG.github);
     text = text.replace(/<VSCODE>/g, CONFIG.vscode ? CONFIG.vscode : '');

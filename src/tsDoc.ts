@@ -4,9 +4,9 @@ import { basename } from 'path';
 import { logger } from './logger';
 
 import { State } from './state';
-import { TsDocConfig } from './config';
 import { getMarkedInput, getGenerated, insertionMarker } from './utility.marker';
 import { BaseCliClass } from './utility.baseClass';
+import { TsDocModuleConfig } from './Modules';
 
 const codeBlock = '```';
 export class TsDoc extends BaseCliClass {
@@ -54,7 +54,7 @@ ${codeBlock}
       CONFIG.out,
       input.replace(
         insertionMarker.regex,
-        getGenerated(`# ${CONFIG.title}\n${this.createNav(navLinks)}${rawText}`, 'tsDoc')
+        getGenerated(`\n# ${CONFIG.title}\n${this.createNav(navLinks)}${rawText}`, 'tsDoc')
       )
     );
     logger.Log('info', 'Generated Docs at ', CONFIG.out);
@@ -74,7 +74,7 @@ ${codeBlock}
     return linkRes;
   }
 
-  private async getPaths(CONFIG: TsDocConfig) {
+  private async getPaths(CONFIG: TsDocModuleConfig) {
     const dir = await Walk(`./${CONFIG.dir}`);
     if (CONFIG.exclude !== undefined && CONFIG.include !== undefined) {
       logger.Log(

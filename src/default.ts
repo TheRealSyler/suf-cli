@@ -1,8 +1,8 @@
 import { State } from './state';
-import { Config } from './config';
 import { GenBadges } from './badges';
 import { TsDoc } from './tsDoc';
 import { License } from './license';
+import { ConfigFile } from './Modules';
 
 export class Default {
   constructor(private STATE: State) {
@@ -12,7 +12,7 @@ export class Default {
     const CONFIG = this.STATE.CONFIG;
     for (const key in CONFIG) {
       if (CONFIG.hasOwnProperty(key)) {
-        switch (key as keyof Config) {
+        switch (key as keyof ConfigFile) {
           case 'badges':
             await new GenBadges(this.STATE).res();
             break;

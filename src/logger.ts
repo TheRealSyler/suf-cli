@@ -24,14 +24,14 @@ export const logger = new Logger<{
       { color: '#2af', background: '#222' }
     ],
     preset: new PresetNodeHelp(
-      `--out: OUTPUT_FILE:Relative path to the output file with extension.
---dir: DIR:        Relative path to the input dir.
---name: NAME:       Header name.
---exclude: FILES:      Comma separated list of files to exclude, cannot be used with --include
---include: FILES:      Comma separated list of files to include, cannot be used with --exclude
--h: :           Displays this Message.`,
+      `INFO: All arguments can start with - or --, but i would recommend to just use letters.
+a | all: Calls all modules.
+b | badges: Calls the badges module.
+t | ts | d.ts | docs: Calls the tsDoc module.
+l | licence: Calls the license module.
+h | help: Displays this Message.`,
       ':',
-      11,
+      25,
       90
     )
   }

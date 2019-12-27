@@ -1,19 +1,20 @@
-import { Config, CreateOrUpdateConfig } from './config';
+import { CreateOrUpdateConfig } from './config';
 import { IPackageJson } from 'package-json-type';
 import { logger } from './logger';
+import { ConfigFile } from './Modules';
 
 export class State {
-  constructor(public PACKAGE: IPackageJson, private _CONFIG: Config, public ARGS: string[]) {}
+  constructor(public PACKAGE: IPackageJson, private _CONFIG: ConfigFile) {}
 
-  public get CONFIG(): Config {
+  public get CONFIG(): ConfigFile {
     return this._CONFIG;
   }
 
-  public set CONFIG(v: Config) {
+  public set CONFIG(v: ConfigFile) {
     logger.Log('error', 'use editConfig.');
   }
 
-  async getConfig<T extends keyof Config>(type: T): Promise<Config[T]> {
+  async getConfig<T extends keyof ConfigFile>(type: T): Promise<ConfigFile[T]> {
     if (this._CONFIG[type] !== undefined) {
       return this._CONFIG[type];
     } else {

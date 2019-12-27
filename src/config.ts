@@ -4,44 +4,15 @@ import { styler } from '@sorg/log';
 import { getYNAnswer, Exits, readConsole } from 'suf-node';
 import { IPackageJson } from 'package-json-type';
 import fetch from 'node-fetch';
+import { ConfigFile, BadgesModuleConfig, TsDocModuleConfig, LicenseModuleConfig } from './Modules';
+import { Badges, Links } from './badgeTypes';
 
 const CONFIG_PATH = './suf.config.json';
 
-export interface BadgesConfig {
-  name: string;
-  github: string;
-  vscode?: string;
-  repo: string;
-  out: string;
-  badges: string[];
-  externalConfig?: string;
-}
-
-export interface TsDocConfig {
-  title: string;
-  dir: string;
-  out: string;
-  include?: string[];
-  exclude?: string[];
-}
-export interface LicenseConfig {
-  type: string;
-  year: string;
-  name: string;
-  out: string;
-  file: string;
-}
-
-export interface Config {
-  badges?: BadgesConfig;
-  tsDoc?: TsDocConfig;
-  license?: LicenseConfig;
-}
-
-export async function getConfig(args: string[], Package: IPackageJson) {
-  return new Promise<Config>(async res => {
+export async function getConfig(Package: IPackageJson) {
+  return new Promise<ConfigFile>(async res => {
     const hasConfig = await Exits(CONFIG_PATH);
-    if (!hasConfig || args[0] === '-fc') {
+    if (!hasConfig) {
       logger.Log('info', 'No config Found, do you want to create one? ', '[Y/n]');
       const answer = await getYNAnswer();
 
@@ -58,26 +29,25 @@ export async function getConfig(args: string[], Package: IPackageJson) {
 
 export async function CreateOrUpdateConfig(
   Package: IPackageJson,
-  type?: keyof Config,
-  CONFIG?: Config
+  type?: keyof ConfigFile,
+  CONFIG?: ConfigFile
 ) {
   const path = './suf.config.json';
-  let config: Config;
+  let config: ConfigFile;
   let updateOrCreate = 'Update';
   if (type) {
     logger.Log('info', `Adding ${type} to Config.`);
     config = { ...CONFIG, [type]: await GetConfigFuncs[type]!(Package) };
   } else {
-    /**this function should only be called without the type parameter,
-      when there is no config. */
-    config = { ...CONFIG };
+    /**this will only be executed when there is no config. */
+    config = {};
     updateOrCreate = 'Create';
     for (const key in GetConfigFuncs) {
       if (GetConfigFuncs.hasOwnProperty(key)) {
         const ConfigFunc = GetConfigFuncs[key as keyof TGetConfigFuncs];
         logger.Log('info', `Add ${key} to Config?`, '[Y/n]');
         if (await getYNAnswer()) {
-          config = { ...CONFIG, [key]: await ConfigFunc(Package) };
+          config = { ...config, [key]: await ConfigFunc(Package) };
         }
       }
     }
@@ -88,9 +58,9 @@ export async function CreateOrUpdateConfig(
   return config;
 }
 type TGetConfigFuncs = {
-  badges: (Package: any) => Promise<BadgesConfig>;
-  tsDoc: (Package: any) => Promise<TsDocConfig>;
-  license: (Package: any) => Promise<LicenseConfig>;
+  badges: (Package: any) => Promise<BadgesModuleConfig>;
+  tsDoc: (Package: any) => Promise<TsDocModuleConfig>;
+  license: (Package: any) => Promise<LicenseModuleConfig>;
 };
 const GetConfigFuncs: TGetConfigFuncs = {
   badges: async (Package: any) => {
@@ -152,7 +122,7 @@ async function getInp(type: string, type2: string, _default?: string) {
   }
   return readConsole();
 }
-async function getBadges(out?: string[]): Promise<string[]> {
+async function getBadges(out?: any[]): Promise<string[]> {
   if (!out) {
     out = [];
     process.stdout.write(styler('Press Enter to Accept. ', colors.info));

@@ -7,14 +7,15 @@ import { getConfig } from './config';
 import { State } from './state';
 import { Default } from './default';
 import { License } from './license';
+import { logger } from './logger';
 
 (async () => {
-  const args = getArgs();
+  const ARGS = getArgs();
   const Package = await getPackageJson();
-  const config = await getConfig(args, Package);
-  const STATE = new State(Package, config, args);
+  const config = await getConfig(Package);
+  const STATE = new State(Package, config);
   try {
-    switch (args[0]) {
+    switch (ARGS[0] ? ARGS[0].replace(/^--?/, '') : ARGS[0]) {
       case 'a':
       case 'all':
         await CallAll(STATE);
@@ -32,6 +33,10 @@ import { License } from './license';
       case 'l':
       case 'license':
         await new License(STATE).res();
+        break;
+      case 'h':
+      case 'help':
+        logger.Log('help');
         break;
       default:
         new Default(STATE);
