@@ -46,20 +46,20 @@ this cli works by reading the `suf.config.json` file, every cli module has its s
 
 ```typescript
 interface BadgesModuleConfig {
-  /**package name */
-  name: string;
-  /**github username */
-  github: string;
-  /**vscode publisher.packageName */
-  vscode?: string;
-  /**github repo name */
-  repo: string;
-  /**path to readme or other target file */
-  out: string;
-  /**Array of badges */
-  badges: string[];
-  /**link to external config,(not sure if this still works) */
-  externalConfig?: string;
+    /**package name */
+    name: string;
+    /**github username */
+    github: string;
+    /**vscode publisher.packageName */
+    vscode?: string;
+    /**github repo name */
+    repo: string;
+    /**path to readme or other target file */
+    out: string;
+    /**Array of badges */
+    badges: string[];
+    /**link to external config,(not sure if this still works) */
+    externalConfig?: string;
 }
 ```
 
@@ -67,16 +67,16 @@ interface BadgesModuleConfig {
 
 ```typescript
 interface TsDocModuleConfig {
-  /**title displayed at the top of the generated text */
-  title: string;
-  /**path to the d.ts files */
-  dir: string;
-  /**path to readme or other target file */
-  out: string;
-  /**include all files in array, include and exclude cannot be used at the same time */
-  include?: string[];
-  /**exclude all files in array, include and exclude cannot be used at the same time */
-  exclude?: string[];
+    /**title displayed at the top of the generated text */
+    title: string;
+    /**path to the d.ts files */
+    dir: string;
+    /**path to readme or other target file */
+    out: string;
+    /**include all files in array, include and exclude cannot be used at the same time */
+    include?: string[];
+    /**exclude all files in array, include and exclude cannot be used at the same time */
+    exclude?: string[];
 }
 ```
 
@@ -84,16 +84,16 @@ interface TsDocModuleConfig {
 
 ```typescript
 interface LicenseModuleConfig {
-  /**license type */
-  type: string;
-  /**license year */
-  year: string;
-  /**full name of the copyright holder */
-  name: string;
-  /**path to readme or other target file */
-  out: string;
-  /**path/name of the LICENSE file */
-  file: string;
+    /**license type */
+    type: string;
+    /**license year */
+    year: string;
+    /**full name of the copyright holder */
+    name: string;
+    /**path to readme or other target file */
+    out: string;
+    /**path/name of the LICENSE file */
+    file: string;
 }
 ```
 
@@ -101,9 +101,9 @@ interface LicenseModuleConfig {
 
 ```typescript
 interface ConfigFile {
-  badges?: BadgesModuleConfig;
-  tsDoc?: TsDocModuleConfig;
-  license?: LicenseModuleConfig;
+    badges?: BadgesModuleConfig;
+    tsDoc?: TsDocModuleConfig;
+    license?: LicenseModuleConfig;
 }
 ```
 
@@ -113,54 +113,54 @@ interface ConfigFile {
 
 ```typescript
 interface Badges {
-  /** circleCi build. */
-  circleci: '/circleci/build/github/<GITHUB>/<REPO>';
-  /** Vscode Extension Version. */
-  vscV: '/visual-studio-marketplace/v/<VSCODE>';
-  /** Vscode Extension downloads. */
-  vscD: '/visual-studio-marketplace/d/<VSCODE>';
-  /** Vscode Extension installs. */
-  vscI: '/visual-studio-marketplace/i/<VSCODE>';
-  /** Vscode Extension ratings. */
-  vscR: '/visual-studio-marketplace/r/<VSCODE>';
-  /** Bundlephobia Min. */
-  min: '/bundlephobia/min/<NAME>';
-  /** Bundlephobia Minzip. */
-  minzip: '/bundlephobia/minzip/<NAME>';
-  /** Packagephobia Install. */
-  install: '/packagephobia/install/<NAME>';
-  /** Packagephobia Publish. */
-  publish: '/packagephobia/publish/<NAME>';
-  /** Npm Version. */
-  npmV: '/npm/v/<NAME>';
-  /** Npm Weekly Downloads. */
-  npmDW: '/npm/dw/<NAME>';
-  /** Npm Monthly Downloads. */
-  npmDM: '/npm/dm/<NAME>';
-  /** Npm Yearly Downloads. */
-  npmDY: '/npm/dy/<NAME>';
-  /** Npm Total Downloads. */
-  npmDT: '/npm/dt/<NAME>';
-  /** Npm Types. */
-  npmTypes: '/npm/types/<NAME>';
-  /** Npm License. */
-  npmLicense: '/npm/license/<NAME>';
-  /** Npm Node. */
-  npmNode: '/npm/node/<NAME>';
-  /** Npm Dependents. */
-  npmDep: '/npm/dependents/<NAME>';
-  /** GitHub Followers. */
-  githubFollowers: '/github/followers/<GITHUB>';
-  /** GitHub Forks. */
-  githubForks: '/github/forks/<GITHUB>/<REPO>';
-  /** GitHub Starts. */
-  githubStars: '/github/stars/<GITHUB>/<REPO>';
-  /** GitHub Issues. */
-  githubIssues: '/github/issues/<GITHUB>/<REPO>';
-  /** GitHub Last Commit. */
-  githubLastCommit: '/github/last-commit/<GITHUB>/<REPO>';
-  /** Custom, usage example: badge=https://img.shields.io/badge/custom%2C-Badge-brightgreen. */
-  badge: '<CUSTOM>';
+    /** circleCi build. */
+    circleci: '/circleci/build/github/<GITHUB>/<REPO>';
+    /** Vscode Extension Version. */
+    vscV: '/visual-studio-marketplace/v/<VSCODE>';
+    /** Vscode Extension downloads. */
+    vscD: '/visual-studio-marketplace/d/<VSCODE>';
+    /** Vscode Extension installs. */
+    vscI: '/visual-studio-marketplace/i/<VSCODE>';
+    /** Vscode Extension ratings. */
+    vscR: '/visual-studio-marketplace/r/<VSCODE>';
+    /** Bundlephobia Min. */
+    min: '/bundlephobia/min/<NAME>';
+    /** Bundlephobia Minzip. */
+    minzip: '/bundlephobia/minzip/<NAME>';
+    /** Packagephobia Install. */
+    install: '/packagephobia/install/<NAME>';
+    /** Packagephobia Publish. */
+    publish: '/packagephobia/publish/<NAME>';
+    /** Npm Version. */
+    npmV: '/npm/v/<NAME>';
+    /** Npm Weekly Downloads. */
+    npmDW: '/npm/dw/<NAME>';
+    /** Npm Monthly Downloads. */
+    npmDM: '/npm/dm/<NAME>';
+    /** Npm Yearly Downloads. */
+    npmDY: '/npm/dy/<NAME>';
+    /** Npm Total Downloads. */
+    npmDT: '/npm/dt/<NAME>';
+    /** Npm Types. */
+    npmTypes: '/npm/types/<NAME>';
+    /** Npm License. */
+    npmLicense: '/npm/license/<NAME>';
+    /** Npm Node. */
+    npmNode: '/npm/node/<NAME>';
+    /** Npm Dependents. */
+    npmDep: '/npm/dependents/<NAME>';
+    /** GitHub Followers. */
+    githubFollowers: '/github/followers/<GITHUB>';
+    /** GitHub Forks. */
+    githubForks: '/github/forks/<GITHUB>/<REPO>';
+    /** GitHub Starts. */
+    githubStars: '/github/stars/<GITHUB>/<REPO>';
+    /** GitHub Issues. */
+    githubIssues: '/github/issues/<GITHUB>/<REPO>';
+    /** GitHub Last Commit. */
+    githubLastCommit: '/github/last-commit/<GITHUB>/<REPO>';
+    /** Custom, usage example: badge=https://img.shields.io/badge/custom%2C-Badge-brightgreen. */
+    badge: '<CUSTOM>';
 }
 ```
 
@@ -168,20 +168,20 @@ interface Badges {
 
 ```typescript
 interface Links {
-  /** Npm package. */
-  npm: 'https://www.npmjs.com/package/<NAME>';
-  /** Github Repo. */
-  github: 'https://github.com/<GITHUB>/<REPO>';
-  /** circleCi Repo Pipelines. */
-  circleci: 'https://app.circleci.com/github/<GITHUB>/<REPO>/pipelines';
-  /** Visual Studio marketplace. */
-  vscode: 'https://marketplace.visualstudio.com/items?itemName=<VSCODE>';
-  /** Bundlephobia Link. */
-  bundle: 'https://bundlephobia.com/result?p=<NAME>';
-  /** Packagephobia Link. */
-  package: 'https://packagephobia.now.sh/result?p=<NAME>';
-  /** Custom, usage example: link=https://example.com. */
-  link: '<CUSTOM>';
+    /** Npm package. */
+    npm: 'https://www.npmjs.com/package/<NAME>';
+    /** Github Repo. */
+    github: 'https://github.com/<GITHUB>/<REPO>';
+    /** circleCi Repo Pipelines. */
+    circleci: 'https://app.circleci.com/github/<GITHUB>/<REPO>/pipelines';
+    /** Visual Studio marketplace. */
+    vscode: 'https://marketplace.visualstudio.com/items?itemName=<VSCODE>';
+    /** Bundlephobia Link. */
+    bundle: 'https://bundlephobia.com/result?p=<NAME>';
+    /** Packagephobia Link. */
+    package: 'https://packagephobia.now.sh/result?p=<NAME>';
+    /** Custom, usage example: link=https://example.com. */
+    link: '<CUSTOM>';
 }
 ```
 
