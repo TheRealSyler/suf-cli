@@ -22,7 +22,6 @@
     "@sorg/log": "^1.0.2",
     "node-fetch": "^2.6.0",
     "suf-node": "^1.1.0",
-    "ts-doc-gen": "^0.2.0",
     "typescript": "^3.6.3"
   },
   "devDependencies": {
