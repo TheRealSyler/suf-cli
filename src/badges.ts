@@ -1,4 +1,4 @@
-import { writeFile, promises } from 'fs';
+import { promises } from 'fs';
 import { logger } from './logger';
 
 import { Badges, Links } from './badgeTypes';
@@ -10,6 +10,7 @@ import { BadgesModuleConfig } from './Modules';
 
 const BADGES: Badges = {
   circleci: '/circleci/build/github/<GITHUB>/<REPO>',
+  codecov: '/gh/<GITHUB>/<REPO>/branch/master/graph/badge.svg',
   vscV: '/visual-studio-marketplace/v/<VSCODE>',
   vscD: '/visual-studio-marketplace/d/<VSCODE>',
   vscI: '/visual-studio-marketplace/i/<VSCODE>',
@@ -42,6 +43,7 @@ const LINKS: Links = {
   vscode: 'https://marketplace.visualstudio.com/items?itemName=<VSCODE>',
   bundle: 'https://bundlephobia.com/result?p=<NAME>',
   package: 'https://packagephobia.now.sh/result?p=<NAME>',
+  codecov: 'https://codecov.io/gh/<GITHUB>/<REPO>',
   link: '<CUSTOM>'
 };
 
@@ -95,6 +97,9 @@ export class GenBadges extends BaseCliClass {
       case 'npmNode':
       case 'npmLicense':
         baseLink = 'https://badgen.net';
+        break;
+      case 'codecov':
+        baseLink = 'https://codecov.io';
         break;
     }
     if (BADGES[type] || (customBadge && LINKS[link]) || customLink) {

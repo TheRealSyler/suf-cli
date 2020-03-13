@@ -1,6 +1,8 @@
 export interface Badges {
   /** circleCi build. */
   circleci: '/circleci/build/github/<GITHUB>/<REPO>';
+  /** codecov percentage. */
+  codecov: '/gh/<GITHUB>/<REPO>/branch/master/graph/badge.svg';
   /** Vscode Extension Version. */
   vscV: '/visual-studio-marketplace/v/<VSCODE>';
   /** Vscode Extension downloads. */
@@ -61,6 +63,8 @@ export interface Links {
   bundle: 'https://bundlephobia.com/result?p=<NAME>';
   /** Packagephobia Link. */
   package: 'https://packagephobia.now.sh/result?p=<NAME>';
+  /** codecov Link. */
+  codecov: 'https://codecov.io/gh/<GITHUB>/<REPO>';
   /** Custom, usage example: link=https://example.com. */
   link: '<CUSTOM>';
 }
