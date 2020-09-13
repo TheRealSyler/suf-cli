@@ -21,14 +21,14 @@
   "dependencies": {
     "@sorg/log": "^2.1.0",
     "node-fetch": "^2.6.0",
-    "suf-node": "^1.1.1",
-    "typescript": "^3.8.3"
+    "suf-node": "^1.1.1"
   },
   "devDependencies": {
     "@types/node": "^12.12.30",
     "@types/node-fetch": "^2.5.5",
     "del-cli": "^3.0.0",
     "package-json-type": "^1.0.3",
-    "tslib": "^1.11.1"
+    "tslib": "^1.11.1",
+    "typescript": "^3.8.3"
   }
 }
