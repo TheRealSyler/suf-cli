@@ -1,27 +1,27 @@
-import { Log, styler } from '@sorg/log';
+import { Log, styler } from 'suf-log';
 
 export const colors = {
   info: '#f64',
   yellow: '#fc2',
   blue: '#08f',
   gray: '#aaa',
-  error: '#f00'
+  error: '#f00',
 };
 
 const loggers = {
   info: {
-    styles: [colors.info, colors.yellow]
+    styles: [colors.info, colors.yellow],
   },
   error: {
-    styles: [{ color: colors.error, bold: true }]
+    styles: [{ color: colors.error, bold: true }],
   },
   help: {
     styles: [
       { color: '#72a', background: '#111' },
       { color: '#f23', background: '#222' },
-      { color: '#2af', background: '#222' }
-    ]
-  }
+      { color: '#2af', background: '#222' },
+    ],
+  },
 };
 
 const nodeHelpMessage = (preset: any, data: any) => {
@@ -31,17 +31,17 @@ const nodeHelpMessage = (preset: any, data: any) => {
     let output = '';
     output += nodeHelpMessage(preset, {
       ...data,
-      rawMessages: ['\n ', ' ']
+      rawMessages: ['\n ', ' '],
     });
     for (const line of lines) {
       output += nodeHelpMessage(preset, {
         ...data,
-        rawMessages: '\n'.concat(line).split(preset.splitter)
+        rawMessages: '\n'.concat(line).split(preset.splitter),
       });
     }
     output += nodeHelpMessage(preset, {
       ...data,
-      rawMessages: ['\n ', '']
+      rawMessages: ['\n ', ''],
     });
     return output.replace(/^\n/, '');
   } else {
@@ -94,18 +94,18 @@ export const logger = {
     h | help: Displays this Message.`,
             splitter: ':',
             firstColumnWidth: 25,
-            secondColumnWidth: 90
+            secondColumnWidth: 90,
           },
           {
             styles: [
               { color: '#72a', background: '#111' },
               { color: '#f23', background: '#222' },
-              { color: '#2af', background: '#222' }
+              { color: '#2af', background: '#222' },
             ],
-            rawMessages: []
+            rawMessages: [],
           }
         )
       );
     }
-  }
+  },
 };

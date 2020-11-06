@@ -673,6 +673,11 @@ s.color@0.0.13:
   dependencies:
     suf-cli "^0.1.0"
 
+s.color@0.0.15:
+  version "0.0.15"
+  resolved "https://registry.yarnpkg.com/s.color/-/s.color-0.0.15.tgz#6b32cd22d8dba95703a5122ddede2020a1560186"
+  integrity sha512-AUNrbEUHeKY8XsYr/DYpl+qk5+aM+DChopnWOPEzn8YKzOhv4l2zH6LzZms3tOZP3wwdOyc0RmTciyi46HLIuA==
+
 "semver@2 || 3 || 4 || 5":
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/semver/-/semver-5.7.1.tgz#a954f931aeba508d307bbf069eff0c01c96116f7"
@@ -724,6 +729,13 @@ suf-cli@^0.1.0:
     "@sorg/log" "^2.1.0"
     node-fetch "^2.6.0"
     suf-node "^1.1.1"
+
+suf-log@^2.1.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/suf-log/-/suf-log-2.2.0.tgz#984718c83c3f423a732cd7c2724043cdeb9f6b07"
+  integrity sha512-duZhdXnbjQIyrTNRaLOFJOd8Ret+ehpyhpVIZH3pmABeCY1KHw4iiUEon5F8C0Sz4Kd1g86uvuxE55TmgrKwCA==
+  dependencies:
+    s.color "0.0.15"
 
 suf-node@^1.1.1:
   version "1.2.1"

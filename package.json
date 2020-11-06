@@ -19,7 +19,7 @@
     "url": "https://github.com/TheRealSyler/suf-cli"
   },
   "dependencies": {
-    "@sorg/log": "^2.1.0",
+    "suf-log": "^2.1.0",
     "node-fetch": "^2.6.0",
     "suf-node": "^1.1.1"
   },
