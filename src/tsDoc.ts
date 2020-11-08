@@ -1,109 +1,115 @@
 import { Walk } from 'suf-node';
-import { readFileSync, writeFile, promises } from 'fs';
-import { basename } from 'path';
+import { readFileSync, promises } from 'fs';
+import { basename, resolve } from 'path';
 import { logger } from './logger';
 
 import { State } from './state';
-import { getMarkedInput, getGenerated, insertionMarker } from './utility.marker';
-import { BaseCliClass } from './utility.baseClass';
+import { fileWithInsertionMarker, insertGenerated, insertionMarker } from './utility.marker';
 import { TsDocModuleConfig } from './Modules';
 
 const codeBlock = '```';
-export class TsDoc extends BaseCliClass {
-  constructor(private STATE: State) {
-    super();
-    this.run();
-  }
-  private async run() {
-    const CONFIG = (await this.STATE.getConfig('tsDoc'))!;
 
-    const filesPaths = await this.getPaths(CONFIG);
+export async function TsDoc(STATE: State) {
+  const section = await STATE.getConfigSection('tsDoc');
 
-    const input = getMarkedInput(CONFIG.out, 'tsDoc');
+  if (section === undefined) return;
 
-    const declarationRegex = /(\/\*\*[\S\s]*? \*\/\n)?export (declare|interface) ([\w-]*) ([\w-]*)(.*?;|[\S\s]*?^})/gm;
-    let rawText = '';
-    const navLinks: string[] = [];
-    for (const path of filesPaths) {
-      const fileText = readFileSync(path).toString();
-      const fileName = path.replace(/.*(\/|\\\\)([\w\.-]*)\.d\.ts/, '$2');
-      let m: RegExpExecArray | null;
-      if (!fileName.endsWith('.internal')) {
-        navLinks.push(`#${fileName}`);
-        let res = `\n### ${fileName}\n`;
+  const CONFIG = addDefaultsToConfig(section);
 
-        while ((m = declarationRegex.exec(fileText)) !== null) {
-          if (m.index === declarationRegex.lastIndex) {
-            declarationRegex.lastIndex++;
-          }
-          let [all, comment, declaration, type, name, content] = m;
-          if (!/^[\n \t]*internal[\n \t]*/i.test(getComment(comment))) {
-            navLinks.push(declaration === 'interface' ? type : name);
-            res += `\n##### ${declaration === 'interface' ? type : name}\n
-${codeBlock}typescript
-${all.replace(/export ?| ?declare ?/g, '')}
+  const filesPaths = await getPaths(CONFIG);
+
+  const input = fileWithInsertionMarker(CONFIG.out, 'tsDoc');
+
+  const declarationBlockRegex = /(\/\*\*?[\S\s]*?\*\/\n)?export[ \t]*(declare|interface)[ \t]*([\w-]*)[ \t]*([\w-]*)(.*?;|[\S\s]*?^})/gm;
+  let output = '';
+  const navLinks: string[] = [];
+  for (const path of filesPaths) {
+    const fileText = readFileSync(path).toString();
+    const fileName = path.replace(/.*(\/|\\\\)([\w\.-]*)\.d\.ts/, '$2');
+    let match: RegExpExecArray | null;
+    navLinks.push(`#${fileName}`);
+    let fileOutput = `\n### ${fileName}\n`;
+
+    while ((match = declarationBlockRegex.exec(fileText)) !== null) {
+      /* istanbul ignore if */
+      if (match.index === declarationBlockRegex.lastIndex) {
+        declarationBlockRegex.lastIndex++;
+      }
+
+      let [all, comment, declaration, type, name, content] = match;
+      const isInternalDeclaration = /^internal/i.test(convertComment(comment));
+
+      if (!isInternalDeclaration) {
+        navLinks.push(declaration === 'interface' ? type : name);
+
+        fileOutput += `\n##### ${declaration === 'interface' ? type : name}\n
+${codeBlock}ts
+${all.replace(/export ?| ?declare ?/g, '').replace(/\n^[ \t]*private.*$/gm, '')}
 ${codeBlock}
 `;
-          }
-        }
-        rawText += res;
       }
     }
-
-    await promises.writeFile(
-      CONFIG.out,
-      input.replace(
-        insertionMarker.regex,
-        getGenerated(`\n# ${CONFIG.title}\n${this.createNav(navLinks)}${rawText}`, 'tsDoc')
-      )
-    );
-    logger.Log('info', 'Generated Docs at ', CONFIG.out);
-    if (this._res) {
-      this._res();
-    }
-  }
-  private createNav(links: string[]) {
-    let linkRes = '';
-    for (const link of links) {
-      if (link.startsWith('#')) {
-        linkRes += `\n- **[${link.replace(/#/, '')}](${link.toLowerCase()})**\n\n`;
-      } else {
-        linkRes += `  - [${link}](#${link.toLowerCase()})\n`;
-      }
-    }
-    return linkRes;
+    output += fileOutput;
   }
 
-  private async getPaths(CONFIG: TsDocModuleConfig) {
-    const dir = await Walk(`./${CONFIG.dir}`);
-    if (CONFIG.exclude !== undefined && CONFIG.include !== undefined) {
-      logger.Log(
-        'error',
-        '[suf-cli:tsDoc] Cannot use option "include" and "exclude" at the same time, all d.ts files will be used.'
-      );
-      return dir.filter(fileName => fileName.endsWith('d.ts'));
-    }
-    const isInclude = CONFIG.include !== undefined ? CONFIG.include.length === 0 : true;
-    const type = isInclude ? 'exclude' : 'include';
-    const checkArr = CONFIG[type] || [];
-    const operator = this.operators[isInclude ? '===' : '!=='];
-    const filesPaths = dir.filter(
-      fileName =>
-        fileName.endsWith('d.ts') &&
-        operator(checkArr.indexOf(basename(fileName).replace(/\.d\.ts$/, '')), -1)
-    );
-    return filesPaths;
-  }
-  private operators = {
-    '!==': function(a: any, b: any) {
-      return a !== b;
-    },
-    '===': function(a: any, b: any) {
-      return a === b;
-    }
+  await promises.writeFile(
+    CONFIG.out,
+    input.replace(
+      insertionMarker.regex,
+      insertGenerated(`\n# ${CONFIG.title}\n${createNav(navLinks)}${output}`, 'tsDoc')
+    )
+  );
+
+  logger.Log('info', 'Generated Docs at:', CONFIG.out);
+}
+
+function addDefaultsToConfig(config: Partial<TsDocModuleConfig>): TsDocModuleConfig {
+  return {
+    ...config,
+
+    dir: /* istanbul ignore next */ config?.dir || '',
+    out: /* istanbul ignore next */ config?.out || 'README.md',
   };
 }
 
-function getComment(comment: string) {
-  return comment ? comment.replace(/\/?\*\*?\/?/g, '') : '';
+async function getPaths(CONFIG: TsDocModuleConfig) {
+  const dir = await Walk(resolve('./', CONFIG.dir));
+
+  if (CONFIG.exclude !== undefined && CONFIG.include !== undefined) {
+    logger.Log(
+      'error',
+      '[suf-cli:tsDoc] Cannot use option "include" and "exclude" at the same time, all d.ts files will be used.'
+    );
+    return dir.filter((fileName) => fileName.endsWith('d.ts'));
+  }
+  const isInclude = CONFIG.include !== undefined ? CONFIG.include.length === 0 : true;
+  const type = isInclude ? 'exclude' : 'include';
+  const checkArr = CONFIG[type] || [];
+
+  const includeCheck = (a: any, b: any) => a === b;
+  const excludeCheck = (a: any, b: any) => a !== b;
+  const check = isInclude ? includeCheck : excludeCheck;
+
+  const filename = (name: string) => basename(name).replace(/\.d\.ts$/, '');
+
+  const filesPaths = dir.filter(
+    (fileName) => fileName.endsWith('d.ts') && check(checkArr.indexOf(filename(fileName)), -1)
+  );
+  return filesPaths;
+}
+
+function createNav(links: string[]) {
+  let output = '';
+  for (const link of links) {
+    if (link.startsWith('#')) {
+      output += `\n- **[${link.replace(/#/, '')}](${link.toLowerCase()})**\n\n`;
+    } else {
+      output += `  - [${link}](#${link.toLowerCase()})\n`;
+    }
+  }
+  return output;
+}
+
+function convertComment(comment: string) {
+  return comment ? comment.replace(/(\/?\*\*?\/?|[\t \n]*)/g, '') : '';
 }

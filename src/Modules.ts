@@ -23,12 +23,12 @@ export interface BadgesModuleConfig {
 
 export interface TsDocModuleConfig {
   /**title displayed at the top of the generated text */
-  title: string;
+  title?: string;
 
   /**path to the d.ts files */
   dir: string;
 
-  /**path to readme or other target file */
+  /**defaults to README.md */
   out: string;
 
   /**include all files in array, include and exclude cannot be used at the same time */
@@ -38,24 +38,24 @@ export interface TsDocModuleConfig {
   exclude?: string[];
 }
 export interface LicenseModuleConfig {
-  /**license type */
+  /**license type, can be found add https://api.github.com/licenses/TYPE */
   type: string;
 
-  /**license year */
-  year: string;
+  /**license year, use null for current year. */
+  year: string | null;
 
   /**full name of the copyright holder */
   name: string;
 
-  /**path to readme or other target file */
-  out: string;
+  /**defaults to README.md */
+  out?: string;
 
-  /**path/name of the LICENSE file */
-  file: string;
+  /**defaults to LICENSE */
+  file?: string;
 }
 
 export interface ConfigFile {
   badges?: BadgesModuleConfig;
-  tsDoc?: TsDocModuleConfig;
+  tsDoc?: Partial<TsDocModuleConfig>;
   license?: LicenseModuleConfig;
 }

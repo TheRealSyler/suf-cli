@@ -1,4 +1,4 @@
-import { Log, styler } from 'suf-log';
+import { Log, styler, LogStyle } from 'suf-log';
 
 export const colors = {
   info: '#f64',
@@ -13,7 +13,7 @@ const loggers = {
     styles: [colors.info, colors.yellow],
   },
   error: {
-    styles: [{ color: colors.error, bold: true }],
+    styles: [{ color: colors.error, 'font-weight': 'bold' }] as LogStyle[],
   },
   help: {
     styles: [

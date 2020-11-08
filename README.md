@@ -44,7 +44,7 @@ this cli works by reading the `suf.config.json` file, every cli module has its s
 
 ##### BadgesModuleConfig
 
-```typescript
+```ts
 interface BadgesModuleConfig {
     /**package name */
     name: string;
@@ -65,13 +65,13 @@ interface BadgesModuleConfig {
 
 ##### TsDocModuleConfig
 
-```typescript
+```ts
 interface TsDocModuleConfig {
     /**title displayed at the top of the generated text */
-    title: string;
+    title?: string;
     /**path to the d.ts files */
     dir: string;
-    /**path to readme or other target file */
+    /**defaults to README.md */
     out: string;
     /**include all files in array, include and exclude cannot be used at the same time */
     include?: string[];
@@ -82,27 +82,27 @@ interface TsDocModuleConfig {
 
 ##### LicenseModuleConfig
 
-```typescript
+```ts
 interface LicenseModuleConfig {
-    /**license type */
+    /**license type, can be found add https://api.github.com/licenses/TYPE */
     type: string;
-    /**license year */
-    year: string;
+    /**license year, use null for current year. */
+    year: string | null;
     /**full name of the copyright holder */
     name: string;
-    /**path to readme or other target file */
-    out: string;
-    /**path/name of the LICENSE file */
-    file: string;
+    /**defaults to README.md */
+    out?: string;
+    /**defaults to LICENSE */
+    file?: string;
 }
 ```
 
 ##### ConfigFile
 
-```typescript
+```ts
 interface ConfigFile {
     badges?: BadgesModuleConfig;
-    tsDoc?: TsDocModuleConfig;
+    tsDoc?: Partial<TsDocModuleConfig>;
     license?: LicenseModuleConfig;
 }
 ```
@@ -111,7 +111,7 @@ interface ConfigFile {
 
 ##### Badges
 
-```typescript
+```ts
 interface Badges {
     /** circleCi build. */
     circleci: '/circleci/build/github/<GITHUB>/<REPO>';
@@ -168,7 +168,7 @@ interface Badges {
 
 ##### Links
 
-```typescript
+```ts
 interface Links {
     /** Npm package. */
     npm: 'https://www.npmjs.com/package/<NAME>';

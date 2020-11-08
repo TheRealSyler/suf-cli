@@ -4,7 +4,7 @@ import { logger } from './logger';
 import { Badges, Links } from './badgeTypes';
 
 import { State } from './state';
-import { getMarkedInput, insertionMarker, getGenerated } from './utility.marker';
+import { fileWithInsertionMarker, insertionMarker, insertGenerated } from './utility.marker';
 import { BaseCliClass } from './utility.baseClass';
 import { BadgesModuleConfig } from './Modules';
 
@@ -33,7 +33,7 @@ const BADGES: Badges = {
   githubStars: '/github/stars/<GITHUB>/<REPO>',
   githubIssues: '/github/issues/<GITHUB>/<REPO>',
   githubLastCommit: '/github/last-commit/<GITHUB>/<REPO>',
-  badge: '<CUSTOM>'
+  badge: '<CUSTOM>',
 };
 
 const LINKS: Links = {
@@ -44,7 +44,7 @@ const LINKS: Links = {
   bundle: 'https://bundlephobia.com/result?p=<NAME>',
   package: 'https://packagephobia.now.sh/result?p=<NAME>',
   codecov: 'https://codecov.io/gh/<GITHUB>/<REPO>',
-  link: '<CUSTOM>'
+  link: '<CUSTOM>',
 };
 
 export class GenBadges extends BaseCliClass {
@@ -54,14 +54,14 @@ export class GenBadges extends BaseCliClass {
   }
 
   private async run() {
-    const CONFIG: BadgesModuleConfig = (await this.STATE.getConfig('badges'))!;
+    const CONFIG: BadgesModuleConfig = (await this.STATE.getConfigSection('badges'))!;
     const generatedBadges = this.getBadges(CONFIG);
 
-    const input = getMarkedInput(CONFIG.out, 'badges');
+    const input = fileWithInsertionMarker(CONFIG.out, 'badges');
 
     await promises.writeFile(
       CONFIG.out,
-      input.replace(insertionMarker.regex, getGenerated(generatedBadges, 'badges'))
+      input.replace(insertionMarker.regex, insertGenerated(generatedBadges, 'badges'))
     );
     logger.Log('info', `Generated Badges at `, CONFIG.out);
     if (this._res) {

@@ -7,7 +7,7 @@ type Marker = {
 
 export const insertionMarker: Marker = {
   marker: 'SUF_CLI_DOC_INSERTION_MARKER',
-  regex: /SUF_CLI_DOC_INSERTION_MARKER/g
+  regex: /SUF_CLI_DOC_INSERTION_MARKER/g,
 };
 
 interface MarkerTypes {
@@ -20,21 +20,21 @@ const Markers: MarkerTypes = {
   tsDoc: {
     regex: /<span id="DOC_GENERATION_MARKER_0"><\/span>[\S\s]*<span id="DOC_GENERATION_MARKER_1"><\/span>/,
     marker:
-      '<span id="DOC_GENERATION_MARKER_0"></span>\n__INSERT_GENERATED__\n_Generated with_ **[suf-cli](https://www.npmjs.com/package/suf-cli)**\n<span id="DOC_GENERATION_MARKER_1"></span>'
+      '<span id="DOC_GENERATION_MARKER_0"></span>\n__INSERT_GENERATED__\n_Generated with_ **[suf-cli](https://www.npmjs.com/package/suf-cli)**\n<span id="DOC_GENERATION_MARKER_1"></span>',
   },
   badges: {
     regex: /<span id="BADGE_GENERATION_MARKER_0"><\/span>[\S\s]*<span id="BADGE_GENERATION_MARKER_1"><\/span>/,
     marker:
-      '<span id="BADGE_GENERATION_MARKER_0"></span>\n__INSERT_GENERATED__\n<span id="BADGE_GENERATION_MARKER_1"></span>'
+      '<span id="BADGE_GENERATION_MARKER_0"></span>\n__INSERT_GENERATED__\n<span id="BADGE_GENERATION_MARKER_1"></span>',
   },
   license: {
     regex: /<span id="LICENSE_GENERATION_MARKER_0"><\/span>[\S\s]*<span id="LICENSE_GENERATION_MARKER_1"><\/span>/,
     marker:
-      '<span id="LICENSE_GENERATION_MARKER_0"></span>\n__INSERT_GENERATED__\n<span id="LICENSE_GENERATION_MARKER_1"></span>'
-  }
+      '<span id="LICENSE_GENERATION_MARKER_0"></span>\n__INSERT_GENERATED__\n<span id="LICENSE_GENERATION_MARKER_1"></span>',
+  },
 };
 
-export function getMarkedInput(file: string, type: keyof MarkerTypes) {
+export function fileWithInsertionMarker(file: string, type: keyof MarkerTypes) {
   let input = insertionMarker.marker;
   if (existsSync(file)) {
     const inputFile = readFileSync(file).toString();
@@ -46,6 +46,6 @@ export function getMarkedInput(file: string, type: keyof MarkerTypes) {
   return input;
 }
 
-export function getGenerated(generatedText: string, type: keyof MarkerTypes) {
+export function insertGenerated(generatedText: string, type: keyof MarkerTypes) {
   return Markers[type].marker.replace(/__INSERT_GENERATED__/, generatedText);
 }

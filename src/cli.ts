@@ -5,7 +5,6 @@ import { TsDoc } from './tsDoc';
 import { getPackageJson, getArgs } from './utility';
 import { getConfig } from './config';
 import { State } from './state';
-import { Default } from './default';
 import { License } from './license';
 import { logger } from './logger';
 
@@ -28,18 +27,18 @@ import { logger } from './logger';
       case 'ts':
       case 'd.ts':
       case 'docs':
-        await new TsDoc(STATE).res();
+        await TsDoc(STATE);
         break;
       case 'l':
       case 'license':
-        await new License(STATE).res();
+        await License(STATE);
         break;
       case 'h':
       case 'help':
         logger.Log('help');
         break;
       default:
-        new Default(STATE);
+        CallAll(STATE);
         break;
     }
   } catch (err) {
@@ -49,6 +48,6 @@ import { logger } from './logger';
 
 async function CallAll(STATE: State) {
   await new GenBadges(STATE).res();
-  await new TsDoc(STATE).res();
-  await new License(STATE).res();
+  await TsDoc(STATE);
+  await License(STATE);
 }
