@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": { "*": ["types/*"] },
-    "target": "es5",
+    "target": "ES6",
     "module": "commonjs",
     "watch": true,
     "declaration": true,
@@ -11,5 +11,6 @@
     "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true
-  }
+  },
+  "exclude": ["dist",  "**/*.spec.ts", "**/*.test.ts", "node_modules", "types", "src/test", "suf.config.ts" ]
 }

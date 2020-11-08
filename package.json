@@ -4,7 +4,12 @@
   "description": "Utility Cli",
   "main": "./dist/cli.js",
   "scripts": {
-    "prepack": "del ./dist && del ./types && tsc -b && node ./dist/cli.js"
+    "prepack": "yarn build && node ./dist/cli.js",
+    "build": "del ./dist && del ./types && tsc -b",
+    "watch": "tsc -w",
+    "test": "jest --coverage",
+    "test:clear": "jest --clearCache",
+    "test:watch": "jest --watch --coverage"
   },
   "author": "Syler",
   "license": "MIT",
@@ -19,15 +24,20 @@
     "url": "https://github.com/TheRealSyler/suf-cli"
   },
   "dependencies": {
-    "suf-log": "^2.1.0",
     "node-fetch": "^2.6.0",
+    "suf-log": "^2.5.1",
     "suf-node": "^1.1.1"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.15",
     "@types/node": "^12.12.30",
     "@types/node-fetch": "^2.5.5",
     "del-cli": "^3.0.0",
+    "jest": "^26.6.3",
+    "jest-fetch-mock": "^3.0.3",
+    "jest-store-log": "^1.1.1",
     "package-json-type": "^1.0.3",
+    "ts-jest": "^26.4.3",
     "tslib": "^1.11.1",
     "typescript": "^3.8.3"
   }
