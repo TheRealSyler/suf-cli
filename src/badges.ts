@@ -1,12 +1,80 @@
 import { promises } from 'fs';
 import { logger } from './logger';
-
 import { Badges, Links } from './badgeTypes';
-
 import { State } from './state';
-import { fileWithInsertionMarker, insertionMarker, insertGenerated } from './utility.marker';
-import { BaseCliClass } from './utility.baseClass';
+import { readFileAndAddMarker, insertionMarker, insertGenerated } from './utility.marker';
 import { BadgesModuleConfig } from './Modules';
+
+export async function Badges(STATE: State) {
+  const CONFIG = await STATE.getConfigSection('badges');
+
+  if (!CONFIG) return;
+
+  const generatedBadges = genBadges(CONFIG);
+
+  const input = readFileAndAddMarker(CONFIG.out, 'badges');
+
+  await promises.writeFile(
+    CONFIG.out,
+    input.replace(insertionMarker.regex, insertGenerated(generatedBadges, 'badges'))
+  );
+  logger.Log('info', `Generated Badges at:`, CONFIG.out);
+}
+
+function genBadges(CONFIG: BadgesModuleConfig) {
+  let out = '';
+  for (const _badge of CONFIG.badges) {
+    out += addBadge(_badge, CONFIG);
+  }
+  return out.replace(/^ /, '');
+}
+
+function addBadge(_badge: string, CONFIG: BadgesModuleConfig): string {
+  let customLink = '';
+  if (/ link=.+/.test(_badge)) {
+    customLink = _badge.replace(/.*?link=([^ ]*) ?.*/, '$1');
+  }
+  let customBadge = '';
+  if (/badge=.+/.test(_badge)) {
+    customBadge = _badge.replace(/badge=([^ ]*) ?.*/, '$1');
+  }
+  const split = _badge.split(' ');
+  const type = split[0] as keyof Badges;
+  const link = split[1] as keyof Links;
+  const params = split[2];
+  let baseLink = 'https://img.shields.io';
+  switch (type) {
+    case 'install':
+    case 'npmDep':
+    case 'npmNode':
+    case 'npmLicense':
+      baseLink = 'https://badgen.net';
+      break;
+    case 'codecov':
+      baseLink = 'https://codecov.io';
+      break;
+  }
+
+  if (BADGES[type] || (customBadge && LINKS[link]) || customLink) {
+    return ` [![${customBadge ? 'Custom' : type}](${customBadge ? '' : baseLink}${
+      customBadge ? customBadge : replacePlaceholders(CONFIG, BADGES[type])
+    }${params ? params : ''})](${
+      customLink ? customLink : replacePlaceholders(CONFIG, LINKS[link])
+    })`;
+  } else {
+    logger.Log('info', `Badge: "${split.join(' ')}" is Not Valid.`);
+  }
+
+  return '';
+}
+
+function replacePlaceholders(CONFIG: BadgesModuleConfig, text: string) {
+  text = text.replace(/<NAME>/g, CONFIG.name);
+  text = text.replace(/<GITHUB>/g, CONFIG.github);
+  text = text.replace(/<VSCODE>/g, CONFIG.vscode ? CONFIG.vscode : '');
+  text = text.replace(/<REPO>/g, CONFIG.repo);
+  return text;
+}
 
 const BADGES: Badges = {
   circleci: '/circleci/build/github/<GITHUB>/<REPO>',
@@ -46,80 +114,3 @@ const LINKS: Links = {
   codecov: 'https://codecov.io/gh/<GITHUB>/<REPO>',
   link: '<CUSTOM>',
 };
-
-export class GenBadges extends BaseCliClass {
-  constructor(private STATE: State) {
-    super();
-    this.run();
-  }
-
-  private async run() {
-    const CONFIG: BadgesModuleConfig = (await this.STATE.getConfigSection('badges'))!;
-    const generatedBadges = this.getBadges(CONFIG);
-
-    const input = fileWithInsertionMarker(CONFIG.out, 'badges');
-
-    await promises.writeFile(
-      CONFIG.out,
-      input.replace(insertionMarker.regex, insertGenerated(generatedBadges, 'badges'))
-    );
-    logger.Log('info', `Generated Badges at `, CONFIG.out);
-    if (this._res) {
-      this._res();
-    }
-  }
-
-  private getBadges(CONFIG: BadgesModuleConfig) {
-    let out = '';
-    for (const _badge of CONFIG.badges) {
-      out += this.addBadge(_badge, CONFIG);
-    }
-    return out.replace(/^ /, '');
-  }
-
-  private addBadge(_badge: string, CONFIG: BadgesModuleConfig): string {
-    let customLink = '';
-    if (/ link=.+/.test(_badge)) {
-      customLink = _badge.replace(/.*?link=([^ ]*) ?.*/, '$1');
-    }
-    let customBadge = '';
-    if (/badge=.+/.test(_badge)) {
-      customBadge = _badge.replace(/badge=([^ ]*) ?.*/, '$1');
-    }
-    const split = _badge.split(' ');
-    const type = split[0] as keyof Badges;
-    const link = split[1] as keyof Links;
-    const params = split[2];
-    let baseLink = 'https://img.shields.io';
-    switch (type) {
-      case 'install':
-      case 'npmDep':
-      case 'npmNode':
-      case 'npmLicense':
-        baseLink = 'https://badgen.net';
-        break;
-      case 'codecov':
-        baseLink = 'https://codecov.io';
-        break;
-    }
-    if (BADGES[type] || (customBadge && LINKS[link]) || customLink) {
-      return ` [![${customBadge ? 'Custom' : type}](${customBadge ? '' : baseLink}${
-        customBadge ? customBadge : this.replacePlaceholders(CONFIG, BADGES[type])
-      }${params ? params : ''})](${
-        customLink ? customLink : this.replacePlaceholders(CONFIG, LINKS[link])
-      })`;
-    } else {
-      logger.Log('info', `Badge: "${split.join(' ')}" is Not Valid.`);
-    }
-
-    return '';
-  }
-
-  private replacePlaceholders(CONFIG: BadgesModuleConfig, text: string) {
-    text = text.replace(/<NAME>/g, CONFIG.name);
-    text = text.replace(/<GITHUB>/g, CONFIG.github);
-    text = text.replace(/<VSCODE>/g, CONFIG.vscode ? CONFIG.vscode : '');
-    text = text.replace(/<REPO>/g, CONFIG.repo);
-    return text;
-  }
-}

@@ -1,5 +1,4 @@
 import { readFileSync } from 'fs';
-import { resolve } from 'path';
 import { State } from '../../state';
 import { TsDoc } from '../../tsDoc';
 import { JestStoreLog } from 'jest-store-log';

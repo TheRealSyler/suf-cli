@@ -34,7 +34,7 @@ const Markers: MarkerTypes = {
   },
 };
 
-export function fileWithInsertionMarker(file: string, type: keyof MarkerTypes) {
+export function readFileAndAddMarker(file: string, type: keyof MarkerTypes) {
   let input = insertionMarker.marker;
   if (existsSync(file)) {
     const inputFile = readFileSync(file).toString();

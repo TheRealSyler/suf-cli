@@ -4,7 +4,7 @@ import { basename, resolve } from 'path';
 import { logger } from './logger';
 
 import { State } from './state';
-import { fileWithInsertionMarker, insertGenerated, insertionMarker } from './utility.marker';
+import { readFileAndAddMarker, insertGenerated, insertionMarker } from './utility.marker';
 import { TsDocModuleConfig } from './Modules';
 
 const codeBlock = '```';
@@ -18,7 +18,7 @@ export async function TsDoc(STATE: State) {
 
   const filesPaths = await getPaths(CONFIG);
 
-  const input = fileWithInsertionMarker(CONFIG.out, 'tsDoc');
+  const input = readFileAndAddMarker(CONFIG.out, 'tsDoc');
 
   const declarationBlockRegex = /(\/\*\*?[\S\s]*?\*\/\n)?export[ \t]*(declare|interface)[ \t]*([\w-]*)[ \t]*([\w-]*)(.*?;|[\S\s]*?^})/gm;
   let output = '';

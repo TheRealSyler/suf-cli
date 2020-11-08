@@ -1,7 +1,7 @@
 import { State } from './state';
 import fetch from 'node-fetch';
 import { promises } from 'fs';
-import { insertionMarker, fileWithInsertionMarker, insertGenerated } from './utility.marker';
+import { insertionMarker, readFileAndAddMarker, insertGenerated } from './utility.marker';
 import { logger } from './logger';
 import { resolve } from 'path';
 
@@ -14,7 +14,7 @@ export async function License(STATE: State) {
   const OUT = CONFIG.out || 'README.md';
   const FILE = CONFIG.file || 'LICENSE';
   const YEAR = CONFIG.year ? CONFIG.year : new Date().getFullYear().toString();
-  const input = fileWithInsertionMarker(OUT, 'license');
+  const input = readFileAndAddMarker(OUT, 'license');
 
   const readmeText = `Copyright (c) YEAR NAME Licensed under the TYPE license.`
     .replace(/NAME/, CONFIG.name)

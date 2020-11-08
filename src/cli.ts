@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { GenBadges } from './badges';
+import { Badges } from './badges';
 import { TsDoc } from './tsDoc';
 import { getPackageJson, getArgs } from './utility';
 import { getConfig } from './config';
@@ -21,7 +21,7 @@ import { logger } from './logger';
         break;
       case 'b':
       case 'badges':
-        await new GenBadges(STATE).res();
+        await Badges(STATE);
         break;
       case 't':
       case 'ts':
@@ -47,7 +47,7 @@ import { logger } from './logger';
 })();
 
 async function CallAll(STATE: State) {
-  await new GenBadges(STATE).res();
+  await Badges(STATE);
   await TsDoc(STATE);
   await License(STATE);
 }
