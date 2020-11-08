@@ -5,14 +5,22 @@ import { getYNAnswer, Exits, readConsole } from 'suf-node';
 import { IPackageJson } from 'package-json-type';
 import fetch from 'node-fetch';
 import { ConfigFile, BadgesModuleConfig, TsDocModuleConfig, LicenseModuleConfig } from './Modules';
-import { Badges, Links } from './badgeTypes';
+import { exit } from 'process';
 
-const CONFIG_PATH = './suf.config.json';
+type ConfigExtensions = 'ts' | 'json';
+const CONFIG_PATH = (extension: ConfigExtensions) => `./suf.config.${extension}`;
+
+async function checkConfigExists(): Promise<ConfigExtensions | null> {
+  if (await Exits(CONFIG_PATH('json'))) return 'json';
+  if (await Exits(CONFIG_PATH('ts'))) return 'ts';
+
+  return null;
+}
 
 export async function getConfig(Package: IPackageJson) {
-  return new Promise<ConfigFile>(async res => {
-    const hasConfig = await Exits(CONFIG_PATH);
-    if (!hasConfig) {
+  return new Promise<ConfigFile>(async (res) => {
+    const extension = await checkConfigExists();
+    if (!extension) {
       logger.Log('info', 'No config Found, do you want to create one? ', '[Y/n]');
       const answer = await getYNAnswer();
 
@@ -22,7 +30,23 @@ export async function getConfig(Package: IPackageJson) {
         process.exit();
       }
     } else {
-      res(JSON.parse((await promises.readFile(CONFIG_PATH)).toString()));
+      switch (extension) {
+        case 'json':
+          res(JSON.parse((await promises.readFile(CONFIG_PATH('json'))).toString()));
+          break;
+
+        case 'ts':
+          try {
+            const transpileModule = (await import('typescript')).transpileModule;
+            const text = (await promises.readFile(CONFIG_PATH('ts'))).toString();
+
+            res(eval(transpileModule(text, {}).outputText));
+          } catch {
+            logger.Log('error', 'Please install typescript or use a .json config file!');
+            exit(1);
+          }
+          break;
+      }
     }
   });
 }
@@ -69,14 +93,14 @@ const GetConfigFuncs: TGetConfigFuncs = {
       github: await getInp('Github', 'Username'),
       repo: await getInp('Github', 'Repo', Package.name),
       out: await getInp('out', 'OUTPUT PATH', 'README.md'),
-      badges: [...(await getBadges())]
+      badges: [...(await getBadges())],
     };
   },
   tsDoc: async () => {
     return {
       title: await getInp('title', 'TITLE', 'Docs'),
       dir: await getInp('dir', 'INPUT PATH', 'dist'),
-      out: await getInp('out', 'OUTPUT PATH', 'README.md')
+      out: await getInp('out', 'OUTPUT PATH', 'README.md'),
     };
   },
   license: async () => {
@@ -85,9 +109,9 @@ const GetConfigFuncs: TGetConfigFuncs = {
       type: await getLicenseType(),
       year: await getInp('year', 'YEAR', new Date().getFullYear().toString()),
       out: await getInp('out', 'OUTPUT PATH', 'README.md'),
-      file: await getInp('file', 'LICENSE FILE PATH', 'LICENSE')
+      file: await getInp('file', 'LICENSE FILE PATH', 'LICENSE'),
     };
-  }
+  },
 };
 
 async function getLicenseType() {
@@ -97,7 +121,7 @@ async function getLicenseType() {
     styler(
       'Choose From: ' +
         JSON.stringify(
-          licenses.map(l => l.key),
+          licenses.map((l) => l.key),
           null,
           2
         ).replace(/[\[\]",]/g, ''),
