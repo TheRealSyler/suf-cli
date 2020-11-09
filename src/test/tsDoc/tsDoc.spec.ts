@@ -1,7 +1,10 @@
 import { readFileSync } from 'fs';
 import { State } from '../../state';
-import { TsDoc } from '../../tsDoc';
+import { TsDoc } from '../../modules/tsDoc';
 import { JestStoreLog } from 'jest-store-log';
+import { removeNodeStyles } from 'suf-log';
+import { genMessage } from '../../logger';
+
 test('tsDoc', async () => {
   process.chdir(__dirname);
   const log = new JestStoreLog();
@@ -15,7 +18,8 @@ test('tsDoc', async () => {
           out: outFilePath,
           title: 'THE TEST',
         },
-      }
+      },
+      'NO_CONFIG_FILE'
     )
   );
 
@@ -51,5 +55,5 @@ class TEST {
 _Generated with_ **[suf-cli](https://www.npmjs.com/package/suf-cli)**
 <span id="DOC_GENERATION_MARKER_1"></span>`);
 
-  expect(log.logs[0]).toEqual(`%cGenerated Docs at: %c${outFilePath}`);
+  expect(removeNodeStyles(log.logs[0])).toEqual(`${genMessage('TsDoc')} ${outFilePath}`);
 });
