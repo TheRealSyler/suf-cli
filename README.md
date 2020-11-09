@@ -1,7 +1,7 @@
 ## suf-cli
 
 <span id="BADGE_GENERATION_MARKER_0"></span>
-[![npmV](https://img.shields.io/npm/v/suf-cli)](https://www.npmjs.com/package/suf-cli) [![min](https://img.shields.io/bundlephobia/min/suf-cli)](https://bundlephobia.com/result?p=suf-cli) [![install](https://badgen.net/packagephobia/install/suf-cli)](https://packagephobia.now.sh/result?p=suf-cli) [![githubLastCommit](https://img.shields.io/github/last-commit/TheRealSyler/suf-cli)](https://github.com/TheRealSyler/suf-cli)
+[![npmV](https://img.shields.io/npm/v/suf-cli)](https://www.npmjs.com/package/suf-cli) [![min](https://img.shields.io/bundlephobia/min/suf-cli)](https://bundlephobia.com/result?p=suf-cli) [![install](https://badgen.net/packagephobia/install/suf-cli)](https://packagephobia.now.sh/result?p=suf-cli) [![githubLastCommit](https://img.shields.io/github/last-commit/TheRealSyler/suf-cli)](https://github.com/TheRealSyler/suf-cli) [![circleci](https://img.shields.io/circleci/build/github/TheRealSyler/suf-cli)](https://app.circleci.com/github/TheRealSyler/suf-cli/pipelines) [![codecov](https://codecov.io/gh/TheRealSyler/suf-cli/branch/master/graph/badge.svg)](https://codecov.io/gh/TheRealSyler/suf-cli)
 <span id="BADGE_GENERATION_MARKER_1"></span>
 
 suf-cli is a utility cli for automating readme stuff, like adding a license, most of the stuff below and above has been generated with this cli.

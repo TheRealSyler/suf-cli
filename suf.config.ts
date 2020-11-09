@@ -6,7 +6,14 @@ const config: ConfigFile = {
     github: 'TheRealSyler',
     repo: 'suf-cli',
     out: 'README.md',
-    badges: ['npmV npm', 'min bundle', 'install package', 'githubLastCommit github'],
+    badges: [
+      'npmV npm',
+      'min bundle',
+      'install package',
+      'githubLastCommit github',
+      'circleci circleci',
+      'codecov codecov',
+    ],
   },
   license: {
     name: 'Leonard Grosoli',
