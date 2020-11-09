@@ -1,21 +1,27 @@
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { State } from '../../state';
 import { TsDoc } from '../../modules/tsDoc';
 import { JestStoreLog } from 'jest-store-log';
 import { removeNodeStyles } from 'suf-log';
 import { genMessage } from '../../logger';
+import { run } from '../../run';
 
-test('tsDoc', async () => {
+test('TsDoc', async () => {
   process.chdir(__dirname);
   const log = new JestStoreLog();
-  const outFilePath = 'test.md';
+  const filePath = 'README.md';
+
+  writeFileSync(filePath, '');
+
+  expect(readFileSync(filePath).toString()).toEqual('');
+
   await TsDoc(
     new State(
       {},
       {
         tsDoc: {
           dir: __dirname,
-          out: outFilePath,
+          out: filePath,
           title: 'THE TEST',
         },
       },
@@ -23,10 +29,41 @@ test('tsDoc', async () => {
     )
   );
 
-  expect(readFileSync(outFilePath).toString()).toEqual(`<span id="DOC_GENERATION_MARKER_0"></span>
-
+  expect(readFileSync(filePath).toString()).toEqual(
+    docValue(`
 # THE TEST
+`)
+  );
 
+  expect(removeNodeStyles(log.logs[0])).toEqual(`${genMessage('TsDoc')} ${filePath}`);
+});
+
+test('TsDoc: run cli with (t | ts | d.ts | docs) arg', async () => {
+  process.chdir(__dirname);
+  const log = new JestStoreLog();
+  process.argv = ['', '', 't'];
+  const filePath = 'DOCS.md';
+
+  writeFileSync(filePath, '');
+
+  expect(readFileSync(filePath).toString()).toEqual('');
+
+  await run();
+
+  expect(readFileSync(filePath).toString()).toEqual(
+    docValue(`
+# Docs
+`)
+  );
+
+  expect(removeNodeStyles(log.logs[0])).toEqual(`${genMessage('TsDoc')} ${filePath}`);
+
+  log.restore();
+});
+
+const docValue = (title: string) => `
+<span id="DOC_GENERATION_MARKER_0"></span>
+${title}
 - **[test](#test)**
 
   - [Test](#test)
@@ -53,7 +90,4 @@ class TEST {
 \`\`\`
 
 _Generated with_ **[suf-cli](https://www.npmjs.com/package/suf-cli)**
-<span id="DOC_GENERATION_MARKER_1"></span>`);
-
-  expect(removeNodeStyles(log.logs[0])).toEqual(`${genMessage('TsDoc')} ${outFilePath}`);
-});
+<span id="DOC_GENERATION_MARKER_1"></span>`;
