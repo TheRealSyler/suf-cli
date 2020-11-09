@@ -44,7 +44,7 @@ export interface LicenseModuleConfig {
   type: string;
 
   /**license year, use null for current year. */
-  year: string | null;
+  year: string | null | number;
 
   /**full name of the copyright holder */
   name: string;

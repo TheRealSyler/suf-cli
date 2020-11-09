@@ -13,6 +13,5 @@ const config: ConfigFile = {
       {} as any,
     ],
   },
-  tsDoc: {},
 };
 export default config;

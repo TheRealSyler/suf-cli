@@ -12,12 +12,12 @@ export async function License(STATE: State) {
   const license = await (await fetch(`https://api.github.com/licenses/${CONFIG.type}`)).json();
   const OUT = CONFIG.out || 'README.md';
   const FILE = CONFIG.file || 'LICENSE';
-  const YEAR = CONFIG.year ? CONFIG.year : new Date().getFullYear().toString();
+  const YEAR = CONFIG.year ? CONFIG.year : new Date().getFullYear();
   const input = readFileAndAddMarker(OUT, 'license');
 
   const readmeText = `Copyright (c) YEAR NAME Licensed under the TYPE license.`
     .replace(/NAME/, CONFIG.name)
-    .replace(/YEAR/, YEAR)
+    .replace(/YEAR/, YEAR.toString())
     .replace(/TYPE/, license.spdx_id);
 
   await promises.writeFile(

@@ -1,25 +1,17 @@
-import { readFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { State } from '../../state';
 import { License } from '../../modules/license';
 import { JestStoreLog } from 'jest-store-log';
 import { removeNodeStyles } from 'suf-log/dist/utils';
-import 'jest-fetch-mock';
-import { genMessage } from '../../logger';
 
-test('license', async () => {
+import { genMessage } from '../../logger';
+import { mockLicense } from '../utils';
+import { run } from '../../run';
+
+test('License', async () => {
   process.chdir(__dirname);
   const log = new JestStoreLog();
-  fetchMock.mockOnce(
-    JSON.stringify({
-      spdx_id: 'MIT',
-      body: `MIT License
-
-Copyright (c) [year] [fullname]
-
-bla bla bla...
-`,
-    })
-  );
+  mockLicense();
   await License(
     new State(
       {},
@@ -47,5 +39,39 @@ Copyright (c) 2020 JOHN DoeIO Licensed under the MIT license.
 
   expect(removeNodeStyles(log.logs[0])).toEqual(`${genMessage('License')} README.md`);
   expect(removeNodeStyles(log.logs[1])).toEqual(`${genMessage('License')} LICENSE`);
+  log.restore();
+});
+
+test('License: run cli with (l | license) arg', async () => {
+  process.chdir(__dirname);
+  const log = new JestStoreLog();
+  process.argv = ['', '', 'l'];
+  const filePath = 'LICENSE.md';
+  const filePathLicense = 'LICENSE_2';
+
+  writeFileSync(filePath, '');
+  expect(readFileSync(filePath).toString()).toEqual('');
+
+  writeFileSync(filePathLicense, '');
+  expect(readFileSync(filePathLicense).toString()).toEqual('');
+
+  mockLicense();
+
+  await run();
+
+  expect(readFileSync(filePathLicense).toString()).toEqual(`MIT License
+
+Copyright (c) 3245 JESUS
+
+bla bla bla...
+`);
+
+  expect(readFileSync(filePath).toString()).toEqual(`
+<span id="LICENSE_GENERATION_MARKER_0"></span>
+Copyright (c) 3245 JESUS Licensed under the MIT license.
+<span id="LICENSE_GENERATION_MARKER_1"></span>`);
+  expect(removeNodeStyles(log.logs[0])).toEqual(`${genMessage('License')} LICENSE.md`);
+  expect(removeNodeStyles(log.logs[1])).toEqual(`${genMessage('License')} LICENSE_2`);
+
   log.restore();
 });

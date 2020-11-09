@@ -1,9 +1,9 @@
 import JestStoreLog from 'jest-store-log';
 import { run } from '../../run';
 import { readFileSync, writeFileSync } from 'fs';
-import 'jest-fetch-mock';
 import { removeNodeStyles } from 'suf-log';
 import { genMessage } from '../../logger';
+import { mockLicense } from '../utils';
 
 test('cli: read Config no arg (default)', async () => {
   process.chdir(__dirname);
@@ -45,20 +45,6 @@ test('cli: read Config all arg', async () => {
   log.restore();
 });
 
-function mockLicense() {
-  fetchMock.mockOnce(
-    JSON.stringify({
-      spdx_id: 'MIT',
-      body: `MIT License
-
-Copyright (c) [year] [fullname]
-
-bla bla bla...
-`,
-    })
-  );
-}
-
 function testAll(log: JestStoreLog, filePath: string) {
   expect(log.logs.map((v) => removeNodeStyles(v))).toStrictEqual([
     `${genMessage('Badges')} ${filePath}`,
@@ -69,7 +55,7 @@ function testAll(log: JestStoreLog, filePath: string) {
 
   expect(readFileSync('./LICENSE').toString()).toEqual(`MIT License
 
-Copyright (c) 2020 JANE OED
+Copyright (c) ${new Date().getFullYear()} JANE OED
 
 bla bla bla...
 `);
@@ -106,6 +92,6 @@ class Cli {
 _Generated with_ **[suf-cli](https://www.npmjs.com/package/suf-cli)**
 <span id="DOC_GENERATION_MARKER_1"></span>
 <span id="LICENSE_GENERATION_MARKER_0"></span>
-Copyright (c) 2020 JANE OED Licensed under the MIT license.
+Copyright (c) ${new Date().getFullYear()} JANE OED Licensed under the MIT license.
 <span id="LICENSE_GENERATION_MARKER_1"></span>`);
 }
