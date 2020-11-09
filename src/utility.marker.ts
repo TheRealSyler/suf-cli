@@ -35,15 +35,15 @@ const Markers: MarkerTypes = {
 };
 
 export function readFileAndAddMarker(file: string, type: keyof MarkerTypes) {
-  let input = insertionMarker.marker;
+  let output = insertionMarker.marker;
   if (existsSync(file)) {
     const inputFile = readFileSync(file).toString();
-    input = inputFile.replace(Markers[type].regex, insertionMarker.marker);
-    if (!insertionMarker.regex.test(input)) {
-      input += `\n${insertionMarker.marker}`;
+    output = inputFile.replace(Markers[type].regex, insertionMarker.marker);
+    if (!insertionMarker.regex.test(output)) {
+      output += `\n${insertionMarker.marker}`;
     }
   }
-  return input;
+  return output;
 }
 
 export function insertGenerated(generatedText: string, type: keyof MarkerTypes) {

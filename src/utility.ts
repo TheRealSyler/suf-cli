@@ -1,7 +1,7 @@
-import { logger } from './logger';
 import { promises } from 'fs';
 import { Exits } from 'suf-node';
 import { IPackageJson } from 'package-json-type';
+import { log } from './logger';
 export function addArgToConfig<T extends Object>(io: {
   name: keyof T;
   args: string[];
@@ -17,15 +17,15 @@ export function addArgToConfig<T extends Object>(io: {
       io.config[io.name] = nextArg.split(',') as any;
     }
   } else {
-    logger.Log('error', `--${io.name} ${io.args[io.i + 1]} not Found.`);
+    log('error', `--${io.name} ${io.args[io.i + 1]} not Found.`);
   }
 }
 
 export async function getPackageJson() {
   const hasPackage = await Exits('./package.json');
   if (!hasPackage) {
-    logger.Log('info', 'No package.json found!');
-    process.exit();
+    log('info', 'No package.json found!');
+    process.exit(1);
   }
   return JSON.parse((await promises.readFile('./package.json')).toString()) as IPackageJson;
 }

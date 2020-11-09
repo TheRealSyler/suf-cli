@@ -47,8 +47,8 @@ export interface Badges {
   githubIssues: '/github/issues/<GITHUB>/<REPO>';
   /** GitHub Last Commit. */
   githubLastCommit: '/github/last-commit/<GITHUB>/<REPO>';
-  /** Custom, usage example: badge=https://img.shields.io/badge/custom%2C-Badge-brightgreen. */
-  badge: '<CUSTOM>';
+  // /** Custom, usage example: badge=https://img.shields.io/badge/custom%2C-Badge-brightgreen. */
+  // badge: '<CUSTOM>';
 }
 export interface Links {
   /** Npm package. */
@@ -65,6 +65,6 @@ export interface Links {
   package: 'https://packagephobia.now.sh/result?p=<NAME>';
   /** codecov Link. */
   codecov: 'https://codecov.io/gh/<GITHUB>/<REPO>';
-  /** Custom, usage example: link=https://example.com. */
-  link: '<CUSTOM>';
+  // /** Custom, usage example: link=https://example.com. */
+  // link: '<CUSTOM>';
 }

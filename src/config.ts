@@ -1,77 +1,89 @@
-import { logger, colors } from './logger';
+import { colors, log } from './logger';
 import { promises } from 'fs';
-import { styler } from '@sorg/log';
+import { styler } from 'suf-log';
 import { getYNAnswer, Exits, readConsole } from 'suf-node';
 import { IPackageJson } from 'package-json-type';
 import fetch from 'node-fetch';
-import { ConfigFile, BadgesModuleConfig, TsDocModuleConfig, LicenseModuleConfig } from './Modules';
-import { exit } from 'process';
+import { ConfigFile, BadgesModuleConfig, TsDocModuleConfig, LicenseModuleConfig } from './modules';
+import { State } from './state';
 
 type ConfigExtensions = 'ts' | 'json';
-const CONFIG_PATH = (extension: ConfigExtensions) => `./suf.config.${extension}`;
+const configPath = (extension: ConfigExtensions) => `./suf.config.${extension}`;
 
 async function checkConfigExists(): Promise<ConfigExtensions | null> {
-  if (await Exits(CONFIG_PATH('json'))) return 'json';
-  if (await Exits(CONFIG_PATH('ts'))) return 'ts';
+  /*istanbul ignore else */
+  if (await Exits(configPath('json'))) return 'json';
+  /*istanbul ignore else */
+  if (await Exits(configPath('ts'))) return 'ts';
 
   return null;
 }
 
 export async function getConfig(Package: IPackageJson) {
-  return new Promise<ConfigFile>(async (res) => {
-    const extension = await checkConfigExists();
-    if (!extension) {
-      logger.Log('info', 'No config Found, do you want to create one? ', '[Y/n]');
-      const answer = await getYNAnswer();
+  const extension = await checkConfigExists();
+  if (!extension) {
+    log('info', 'No config Found, do you want to create one? ', '[Y/n]');
 
-      if (answer) {
-        res(await CreateOrUpdateConfig(Package));
-      } else {
-        process.exit();
+    const answer = await getYNAnswer();
+
+    if (answer) {
+      const newConfig = await createOrUpdateConfig(Package);
+      if (!newConfig) {
+        process.exit(0);
       }
-    } else {
-      switch (extension) {
-        case 'json':
-          res(JSON.parse((await promises.readFile(CONFIG_PATH('json'))).toString()));
-          break;
-
-        case 'ts':
-          try {
-            const transpileModule = (await import('typescript')).transpileModule;
-            const text = (await promises.readFile(CONFIG_PATH('ts'))).toString();
-
-            res(eval(transpileModule(text, {}).outputText));
-          } catch {
-            logger.Log('error', 'Please install typescript or use a .json config file!');
-            exit(1);
-          }
-          break;
-      }
+      return { config: newConfig, configPath: configPath('json') };
     }
-  });
+
+    process.exit(1);
+  } else {
+    switch (extension) {
+      case 'json':
+        return {
+          config: JSON.parse((await promises.readFile(configPath('json'))).toString()),
+          configPath: configPath('json'),
+        };
+
+      case 'ts':
+        try {
+          const transpileModule = (await import('typescript')).transpileModule;
+          const text = (await promises.readFile(configPath('ts'))).toString();
+          const config = eval(transpileModule(text, {}).outputText);
+          if (!config) {
+            log('error', `${configPath('ts')} export is invalid.`);
+            process.exit(1);
+          }
+          return { config: config || {}, configPath: configPath('ts') };
+        } catch {
+          log('error', 'Please install typescript or use a .json config file!');
+          process.exit(1);
+        }
+    }
+  }
 }
 
-export async function CreateOrUpdateConfig(
-  Package: IPackageJson,
+export async function createOrUpdateConfig(
+  packageJson: IPackageJson,
   type?: keyof ConfigFile,
-  CONFIG?: ConfigFile
+  STATE?: State
 ) {
-  const path = './suf.config.json';
+  const path = STATE?.configPath || configPath('json');
+  if (!path.endsWith('.json')) return undefined;
   let config: ConfigFile;
   let updateOrCreate = 'Update';
-  if (type) {
-    logger.Log('info', `Adding ${type} to Config.`);
-    config = { ...CONFIG, [type]: await GetConfigFuncs[type]!(Package) };
+
+  if (type && STATE) {
+    log('info', `Adding ${type} to Config.`);
+    config = { ...STATE.CONFIG, [type]: await configFuncs[type]!(packageJson) };
   } else {
     /**this will only be executed when there is no config. */
     config = {};
     updateOrCreate = 'Create';
-    for (const key in GetConfigFuncs) {
-      if (GetConfigFuncs.hasOwnProperty(key)) {
-        const ConfigFunc = GetConfigFuncs[key as keyof TGetConfigFuncs];
-        logger.Log('info', `Add ${key} to Config?`, '[Y/n]');
+    for (const key in configFuncs) {
+      if (configFuncs.hasOwnProperty(key)) {
+        const configFunc = configFuncs[key as keyof TGetConfigFuncs];
+        log('info', `Add ${key} to Config?`, '[Y/n]');
         if (await getYNAnswer()) {
-          config = { ...config, [key]: await ConfigFunc(Package) };
+          config = { ...config, [key]: await configFunc(packageJson) };
         }
       }
     }
@@ -86,12 +98,13 @@ type TGetConfigFuncs = {
   tsDoc: (Package: any) => Promise<TsDocModuleConfig>;
   license: (Package: any) => Promise<LicenseModuleConfig>;
 };
-const GetConfigFuncs: TGetConfigFuncs = {
+
+const configFuncs: TGetConfigFuncs = {
   badges: async (Package: any) => {
     return {
-      name: await getInp('Name', 'PACKAGE NAME', Package.name),
+      name: await getInp('Name', 'PACKAGE NAME', Package.name || ''),
       github: await getInp('Github', 'Username'),
-      repo: await getInp('Github', 'Repo', Package.name),
+      repo: await getInp('Github', 'Repo', Package.name || ''),
       out: await getInp('out', 'OUTPUT PATH', 'README.md'),
       badges: [...(await getBadges())],
     };

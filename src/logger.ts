@@ -8,6 +8,8 @@ export const colors = {
   error: '#f00',
 };
 
+export const genMessage = (module: string) => `Generated ${module} at:`;
+
 const loggers = {
   info: {
     styles: [colors.info, colors.yellow],
@@ -23,6 +25,36 @@ const loggers = {
     ],
   },
 };
+
+export function log(type: keyof typeof loggers, ...messages: string[]) {
+  if (type !== 'help') {
+    Log(...messages.map((msg, i) => styler(msg, loggers[type].styles[i])));
+  } else {
+    console.log(
+      nodeHelpMessage(
+        {
+          text: `    INFO: All arguments can start with - or --, but i would recommend to just use letters.
+    a | all: Calls all modules.
+    b | badges: Calls the badges module.
+    t | ts | d.ts | docs: Calls the tsDoc module.
+    l | licence: Calls the license module.
+    h | help: Displays this Message.`,
+          splitter: ':',
+          firstColumnWidth: 25,
+          secondColumnWidth: 90,
+        },
+        {
+          styles: [
+            { color: '#72a', background: '#111' },
+            { color: '#f23', background: '#222' },
+            { color: '#2af', background: '#222' },
+          ],
+          rawMessages: [],
+        }
+      )
+    );
+  }
+}
 
 const nodeHelpMessage = (preset: any, data: any) => {
   if (preset.text) {
@@ -51,8 +83,10 @@ const nodeHelpMessage = (preset: any, data: any) => {
     }
 
     const lastIndex = messages.length - 1;
+    /*istanbul ignore else */
     if (messages.length > 1) {
       const space = preset.firstColumnWidth - messages[0].message.length;
+      /*istanbul ignore else */
       if (space >= 0) {
         messages[0].message = messages[0].message
           .replace(/^(\n)?/, '$1 ')
@@ -65,6 +99,7 @@ const nodeHelpMessage = (preset: any, data: any) => {
       }
       const endingSpace =
         preset.secondColumnWidth - (concatenatedMessages.length + (messages.length - 1) * 2);
+      /*istanbul ignore else */
       if (endingSpace >= 0) {
         messages[lastIndex].message = messages[lastIndex].message.concat(' '.repeat(endingSpace));
       }
@@ -76,36 +111,4 @@ const nodeHelpMessage = (preset: any, data: any) => {
     }
     return output;
   }
-};
-
-export const logger = {
-  Log: (type: keyof typeof loggers, ...messages: string[]) => {
-    if (type !== 'help') {
-      Log(...messages.map((msg, i) => styler(msg, loggers[type].styles[i])));
-    } else {
-      console.log(
-        nodeHelpMessage(
-          {
-            text: `    INFO: All arguments can start with - or --, but i would recommend to just use letters.
-    a | all: Calls all modules.
-    b | badges: Calls the badges module.
-    t | ts | d.ts | docs: Calls the tsDoc module.
-    l | licence: Calls the license module.
-    h | help: Displays this Message.`,
-            splitter: ':',
-            firstColumnWidth: 25,
-            secondColumnWidth: 90,
-          },
-          {
-            styles: [
-              { color: '#72a', background: '#111' },
-              { color: '#f23', background: '#222' },
-              { color: '#2af', background: '#222' },
-            ],
-            rawMessages: [],
-          }
-        )
-      );
-    }
-  },
 };
