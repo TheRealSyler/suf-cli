@@ -1,8 +1,10 @@
 import { readFileSync } from 'fs';
 import { State } from '../../state';
-import { License } from '../../license';
+import { License } from '../../modules/license';
 import { JestStoreLog } from 'jest-store-log';
+import { removeNodeStyles } from 'suf-log/dist/utils';
 import 'jest-fetch-mock';
+import { genMessage } from '../../logger';
 
 test('license', async () => {
   process.chdir(__dirname);
@@ -27,7 +29,8 @@ bla bla bla...
           type: 'mit',
           year: null,
         },
-      }
+      },
+      'NO_CONFIG_FILE'
     )
   );
 
@@ -42,6 +45,7 @@ bla bla bla...
 Copyright (c) 2020 JOHN DoeIO Licensed under the MIT license.
 <span id="LICENSE_GENERATION_MARKER_1"></span>`);
 
-  expect(log.logs[0]).toEqual(`%cGenerated License at: %cREADME.md`);
-  expect(log.logs[1]).toEqual(`%cGenerated License at: %cLICENSE`);
+  expect(removeNodeStyles(log.logs[0])).toEqual(`${genMessage('License')} README.md`);
+  expect(removeNodeStyles(log.logs[1])).toEqual(`${genMessage('License')} LICENSE`);
+  log.restore();
 });
