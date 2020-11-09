@@ -1,11 +1,11 @@
 import { Walk } from 'suf-node';
 import { readFileSync, promises } from 'fs';
 import { basename, resolve } from 'path';
-import { logger } from './logger';
 
-import { State } from './state';
-import { readFileAndAddMarker, insertGenerated, insertionMarker } from './utility.marker';
-import { TsDocModuleConfig } from './Modules';
+import { State } from '../state';
+import { readFileAndAddMarker, insertGenerated, insertionMarker } from '../utility.marker';
+import { TsDocModuleConfig } from '../modules';
+import { genMessage, log } from '../logger';
 
 const codeBlock = '```';
 
@@ -44,7 +44,7 @@ export async function TsDoc(STATE: State) {
 
         fileOutput += `\n##### ${declaration === 'interface' ? type : name}\n
 ${codeBlock}ts
-${all.replace(/export ?| ?declare ?/g, '').replace(/\n^[ \t]*private.*$/gm, '')}
+${all.replace(/export ?| ?declare ?/g, '').replace(/\n^[ \t]*private .*$/gm, '')}
 ${codeBlock}
 `;
       }
@@ -52,15 +52,16 @@ ${codeBlock}
     output += fileOutput;
   }
 
+  const title = CONFIG.title ? `\n# ${CONFIG.title}\n` : '';
   await promises.writeFile(
     CONFIG.out,
     input.replace(
       insertionMarker.regex,
-      insertGenerated(`\n# ${CONFIG.title}\n${createNav(navLinks)}${output}`, 'tsDoc')
+      insertGenerated(`${title}${createNav(navLinks)}${output}`, 'tsDoc')
     )
   );
 
-  logger.Log('info', 'Generated Docs at:', CONFIG.out);
+  log('info', genMessage('TsDoc'), CONFIG.out);
 }
 
 function addDefaultsToConfig(config: Partial<TsDocModuleConfig>): TsDocModuleConfig {
@@ -76,7 +77,7 @@ async function getPaths(CONFIG: TsDocModuleConfig) {
   const dir = await Walk(resolve('./', CONFIG.dir));
 
   if (CONFIG.exclude !== undefined && CONFIG.include !== undefined) {
-    logger.Log(
+    log(
       'error',
       '[suf-cli:tsDoc] Cannot use option "include" and "exclude" at the same time, all d.ts files will be used.'
     );

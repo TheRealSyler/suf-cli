@@ -1,24 +1,27 @@
 import { promises } from 'fs';
-import { logger } from './logger';
-import { Badges, Links } from './badgeTypes';
-import { State } from './state';
-import { readFileAndAddMarker, insertionMarker, insertGenerated } from './utility.marker';
-import { BadgesModuleConfig } from './Modules';
+import { Badges, Links } from '../badgeTypes';
+import { State } from '../state';
+import { readFileAndAddMarker, insertionMarker, insertGenerated } from '../utility.marker';
+import { BadgesModuleConfig } from '../modules';
+import { genMessage, log } from '../logger';
 
 export async function Badges(STATE: State) {
   const CONFIG = await STATE.getConfigSection('badges');
 
   if (!CONFIG) return;
 
+  const outPath = CONFIG.out || 'README.md';
+
   const generatedBadges = genBadges(CONFIG);
 
-  const input = readFileAndAddMarker(CONFIG.out, 'badges');
+  const input = readFileAndAddMarker(outPath, 'badges');
 
   await promises.writeFile(
-    CONFIG.out,
+    outPath,
     input.replace(insertionMarker.regex, insertGenerated(generatedBadges, 'badges'))
   );
-  logger.Log('info', `Generated Badges at:`, CONFIG.out);
+
+  log('info', genMessage('Badges'), outPath);
 }
 
 function genBadges(CONFIG: BadgesModuleConfig) {
@@ -29,19 +32,16 @@ function genBadges(CONFIG: BadgesModuleConfig) {
   return out.replace(/^ /, '');
 }
 
-function addBadge(_badge: string, CONFIG: BadgesModuleConfig): string {
-  let customLink = '';
-  if (/ link=.+/.test(_badge)) {
-    customLink = _badge.replace(/.*?link=([^ ]*) ?.*/, '$1');
+type Badge = BadgesModuleConfig['badges'][keyof BadgesModuleConfig['badges']];
+
+function addBadge(_badge: Badge, CONFIG: BadgesModuleConfig): string {
+  const badge = parseBadge(_badge);
+  if (Array.isArray(badge)) {
+    log('info', `Badge: ${badge} is an invalid badge type.`);
+    return '';
   }
-  let customBadge = '';
-  if (/badge=.+/.test(_badge)) {
-    customBadge = _badge.replace(/badge=([^ ]*) ?.*/, '$1');
-  }
-  const split = _badge.split(' ');
-  const type = split[0] as keyof Badges;
-  const link = split[1] as keyof Links;
-  const params = split[2];
+  const { type, link, params, split, customBadge, customLink } = badge;
+
   let baseLink = 'https://img.shields.io';
   switch (type) {
     case 'install':
@@ -61,17 +61,46 @@ function addBadge(_badge: string, CONFIG: BadgesModuleConfig): string {
     }${params ? params : ''})](${
       customLink ? customLink : replacePlaceholders(CONFIG, LINKS[link])
     })`;
-  } else {
-    logger.Log('info', `Badge: "${split.join(' ')}" is Not Valid.`);
   }
 
+  log('info', `Badge: "${split.join(' ')}" is not valid.`);
+
   return '';
+}
+
+function parseBadge(badge: Badge) {
+  if (typeof badge === 'string') {
+    let customLink = '';
+    if (/ link=.+/.test(badge)) {
+      customLink = badge.replace(/.*?link=([^ ]*) ?.*/, '$1');
+    }
+    let customBadge = '';
+    if (/badge=.+/.test(badge)) {
+      customBadge = badge.replace(/badge=([^ ]*) ?.*/, '$1');
+    }
+    const split = badge.split(' ');
+    const type = split[0] as keyof Badges;
+    const link = split[1] as keyof Links;
+    const params = split[2];
+    return { type, customBadge, link, customLink, params, split };
+  }
+  if (typeof badge === 'object' && Array.isArray(badge)) {
+    return {
+      type: badge[0],
+      link: badge[1],
+      params: badge[2] || '',
+      customBadge: '',
+      customLink: '',
+      split: badge,
+    };
+  }
+  return [badge];
 }
 
 function replacePlaceholders(CONFIG: BadgesModuleConfig, text: string) {
   text = text.replace(/<NAME>/g, CONFIG.name);
   text = text.replace(/<GITHUB>/g, CONFIG.github);
-  text = text.replace(/<VSCODE>/g, CONFIG.vscode ? CONFIG.vscode : '');
+  text = text.replace(/<VSCODE>/g, CONFIG.vscode || '');
   text = text.replace(/<REPO>/g, CONFIG.repo);
   return text;
 }
@@ -101,7 +130,7 @@ const BADGES: Badges = {
   githubStars: '/github/stars/<GITHUB>/<REPO>',
   githubIssues: '/github/issues/<GITHUB>/<REPO>',
   githubLastCommit: '/github/last-commit/<GITHUB>/<REPO>',
-  badge: '<CUSTOM>',
+  // badge: '<CUSTOM>',
 };
 
 const LINKS: Links = {
@@ -112,5 +141,5 @@ const LINKS: Links = {
   bundle: 'https://bundlephobia.com/result?p=<NAME>',
   package: 'https://packagephobia.now.sh/result?p=<NAME>',
   codecov: 'https://codecov.io/gh/<GITHUB>/<REPO>',
-  link: '<CUSTOM>',
+  // link: '<CUSTOM>',
 };

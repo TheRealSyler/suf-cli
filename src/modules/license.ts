@@ -1,9 +1,8 @@
-import { State } from './state';
+import { State } from '../state';
 import fetch from 'node-fetch';
 import { promises } from 'fs';
-import { insertionMarker, readFileAndAddMarker, insertGenerated } from './utility.marker';
-import { logger } from './logger';
-import { resolve } from 'path';
+import { insertionMarker, readFileAndAddMarker, insertGenerated } from '../utility.marker';
+import { genMessage, log } from '../logger';
 
 export async function License(STATE: State) {
   const CONFIG = await STATE.getConfigSection('license');
@@ -25,10 +24,10 @@ export async function License(STATE: State) {
     OUT,
     input.replace(insertionMarker.regex, insertGenerated(readmeText, 'license'))
   );
-  logger.Log('info', 'Generated License at:', OUT);
+  log('info', genMessage('License'), OUT);
   await promises.writeFile(
     FILE,
     license.body.replace(/\[year\]/, YEAR).replace(/\[fullname\]/, CONFIG.name)
   );
-  logger.Log('info', 'Generated License at:', FILE);
+  log('info', genMessage('License'), FILE);
 }
