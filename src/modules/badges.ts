@@ -1,5 +1,5 @@
 import { promises } from 'fs';
-import { Badges, Links } from '../badgeTypes';
+import { BadgeTypes, BadgeLinkTypes } from '../badgeTypes';
 import { State } from '../state';
 import { readFileAndAddMarker, insertionMarker, insertGenerated } from '../utility.marker';
 import { BadgesModuleConfig } from '../modules';
@@ -79,8 +79,8 @@ function parseBadge(badge: Badge) {
       customBadge = badge.replace(/badge=([^ ]*) ?.*/, '$1');
     }
     const split = badge.split(' ');
-    const type = split[0] as keyof Badges;
-    const link = split[1] as keyof Links;
+    const type = split[0] as keyof BadgeTypes;
+    const link = split[1] as keyof BadgeLinkTypes;
     const params = split[2];
     return { type, customBadge, link, customLink, params, split };
   }
@@ -105,7 +105,7 @@ function replacePlaceholders(CONFIG: BadgesModuleConfig, text: string) {
   return text;
 }
 
-const BADGES: Badges = {
+const BADGES: BadgeTypes = {
   circleci: '/circleci/build/github/<GITHUB>/<REPO>',
   codecov: '/gh/<GITHUB>/<REPO>/branch/master/graph/badge.svg',
   vscV: '/visual-studio-marketplace/v/<VSCODE>',
@@ -133,7 +133,7 @@ const BADGES: Badges = {
   // badge: '<CUSTOM>',
 };
 
-const LINKS: Links = {
+const LINKS: BadgeLinkTypes = {
   npm: 'https://www.npmjs.com/package/<NAME>',
   github: 'https://github.com/<GITHUB>/<REPO>',
   circleci: 'https://app.circleci.com/github/<GITHUB>/<REPO>/pipelines',

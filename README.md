@@ -1,10 +1,10 @@
 ## suf-cli
 
+suf-cli is a utility cli for automating readme stuff, like adding a license.
+
 <span id="BADGE_GENERATION_MARKER_0"></span>
 [![npmV](https://img.shields.io/npm/v/suf-cli)](https://www.npmjs.com/package/suf-cli) [![min](https://img.shields.io/bundlephobia/min/suf-cli)](https://bundlephobia.com/result?p=suf-cli) [![install](https://badgen.net/packagephobia/install/suf-cli)](https://packagephobia.now.sh/result?p=suf-cli) [![githubLastCommit](https://img.shields.io/github/last-commit/TheRealSyler/suf-cli)](https://github.com/TheRealSyler/suf-cli) [![circleci](https://img.shields.io/circleci/build/github/TheRealSyler/suf-cli)](https://app.circleci.com/github/TheRealSyler/suf-cli/pipelines) [![codecov](https://codecov.io/gh/TheRealSyler/suf-cli/branch/master/graph/badge.svg)](https://codecov.io/gh/TheRealSyler/suf-cli)
 <span id="BADGE_GENERATION_MARKER_1"></span>
-
-suf-cli is a utility cli for automating readme stuff, like adding a license, most of the stuff below and above has been generated with this cli.
 
 ## Usage
 
@@ -12,7 +12,7 @@ suf-cli is a utility cli for automating readme stuff, like adding a license, mos
 suf
 ```
 
-this cli works by reading the `suf.config.json` file, every cli module has its section in the config file, if you call the cli without any arguments it will ask you to create a config or it executes all modules present in the config, to add a module just execute the command for that module.
+this cli works by reading the `suf.config(.json or .ts)` file, every cli module has its section in the config file, if you call the cli without any arguments it will ask you to create a config or it executes all modules present in the config, to add a module just execute the command for that module.
 
 > INFO: All arguments can start with - or --, but i would recommend to just use letters.
 
@@ -28,91 +28,17 @@ this cli works by reading the `suf.config.json` file, every cli module has its s
 
 # Docs
 
-- **[Modules](#modules)**
-
-  - [BadgesModuleConfig](#badgesmoduleconfig)
-  - [TsDocModuleConfig](#tsdocmoduleconfig)
-  - [LicenseModuleConfig](#licensemoduleconfig)
-  - [ConfigFile](#configfile)
-
 - **[badgeTypes](#badgetypes)**
 
-  - [Badges](#badges)
-  - [Links](#links)
-
-### Modules
-
-##### BadgesModuleConfig
-
-```ts
-interface BadgesModuleConfig {
-    /**package name */
-    name: string;
-    /**github username */
-    github: string;
-    /**vscode publisher.packageName */
-    vscode?: string;
-    /**github repo name */
-    repo: string;
-    /**path to readme or other target file */
-    out: string;
-    /**Array of badges */
-    badges: string[];
-    /**link to external config,(not sure if this still works) */
-    externalConfig?: string;
-}
-```
-
-##### TsDocModuleConfig
-
-```ts
-interface TsDocModuleConfig {
-    /**title displayed at the top of the generated text */
-    title?: string;
-    /**path to the d.ts files */
-    dir: string;
-    /**defaults to README.md */
-    out: string;
-    /**include all files in array, include and exclude cannot be used at the same time */
-    include?: string[];
-    /**exclude all files in array, include and exclude cannot be used at the same time */
-    exclude?: string[];
-}
-```
-
-##### LicenseModuleConfig
-
-```ts
-interface LicenseModuleConfig {
-    /**license type, can be found add https://api.github.com/licenses/TYPE */
-    type: string;
-    /**license year, use null for current year. */
-    year: string | null;
-    /**full name of the copyright holder */
-    name: string;
-    /**defaults to README.md */
-    out?: string;
-    /**defaults to LICENSE */
-    file?: string;
-}
-```
-
-##### ConfigFile
-
-```ts
-interface ConfigFile {
-    badges?: BadgesModuleConfig;
-    tsDoc?: Partial<TsDocModuleConfig>;
-    license?: LicenseModuleConfig;
-}
-```
+  - [BadgeTypes](#badgetypes)
+  - [BadgeLinkTypes](#badgelinktypes)
 
 ### badgeTypes
 
-##### Badges
+##### BadgeTypes
 
 ```ts
-interface Badges {
+interface BadgeTypes {
     /** circleCi build. */
     circleci: '/circleci/build/github/<GITHUB>/<REPO>';
     /** codecov percentage. */
@@ -161,15 +87,13 @@ interface Badges {
     githubIssues: '/github/issues/<GITHUB>/<REPO>';
     /** GitHub Last Commit. */
     githubLastCommit: '/github/last-commit/<GITHUB>/<REPO>';
-    /** Custom, usage example: badge=https://img.shields.io/badge/custom%2C-Badge-brightgreen. */
-    badge: '<CUSTOM>';
 }
 ```
 
-##### Links
+##### BadgeLinkTypes
 
 ```ts
-interface Links {
+interface BadgeLinkTypes {
     /** Npm package. */
     npm: 'https://www.npmjs.com/package/<NAME>';
     /** Github Repo. */
@@ -184,8 +108,6 @@ interface Links {
     package: 'https://packagephobia.now.sh/result?p=<NAME>';
     /** codecov Link. */
     codecov: 'https://codecov.io/gh/<GITHUB>/<REPO>';
-    /** Custom, usage example: link=https://example.com. */
-    link: '<CUSTOM>';
 }
 ```
 

@@ -1,4 +1,4 @@
-export interface Badges {
+export interface BadgeTypes {
   /** circleCi build. */
   circleci: '/circleci/build/github/<GITHUB>/<REPO>';
   /** codecov percentage. */
@@ -50,7 +50,7 @@ export interface Badges {
   // /** Custom, usage example: badge=https://img.shields.io/badge/custom%2C-Badge-brightgreen. */
   // badge: '<CUSTOM>';
 }
-export interface Links {
+export interface BadgeLinkTypes {
   /** Npm package. */
   npm: 'https://www.npmjs.com/package/<NAME>';
   /** Github Repo. */

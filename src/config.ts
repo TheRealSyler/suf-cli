@@ -47,13 +47,15 @@ export async function getConfig(Package: IPackageJson) {
         try {
           const transpileModule = (await import('typescript')).transpileModule;
           const text = (await promises.readFile(configPath('ts'))).toString();
+
           const config = eval(transpileModule(text, {}).outputText);
           if (!config) {
             log('error', `${configPath('ts')} export is invalid.`);
             process.exit(1);
           }
           return { config: config || {}, configPath: configPath('ts') };
-        } catch {
+        } catch (e) {
+          console.log(e);
           log('error', 'Please install typescript or use a .json config file!');
           process.exit(1);
         }
