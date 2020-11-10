@@ -26,7 +26,7 @@ const config: ConfigFile = {
     title: 'Docs',
     dir: 'types',
     out: 'README.md',
-    include: ['Modules', 'badgeTypes'],
+    include: ['modules', 'badgeTypes'],
   },
 };
 export default config;
