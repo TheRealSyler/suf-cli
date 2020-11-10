@@ -89,7 +89,7 @@ export async function createOrUpdateConfig(
     }
   }
 
-  console.log(`${styler(`${updateOrCreate} CONFIG`, colors.blue)}: ${path}`);
+  console.log(`${styler(`${updateOrCreate} Config`, colors.blue)}: ${path}`);
   promises.writeFile(path, JSON.stringify(config, null, 2));
   return config;
 }
@@ -149,7 +149,7 @@ async function getInp(type: string, type2: string, _default?: string) {
   process.stdout.write(styler(` ${type2}`, colors.yellow));
   process.stdout.write(styler(': ', colors.gray));
   if (_default) {
-    process.stdout.write(styler(`(${_default}) `, colors.gray));
+    process.stdout.write(styler(`(${_default})`, colors.gray));
 
     const input = await readConsole();
     if (input.length === 0) {

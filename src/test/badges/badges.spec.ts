@@ -56,3 +56,13 @@ test('Badges: run cli with b | badges arg', async () => {
 
   log.restore();
 });
+
+test('Badges: State', async () => {
+  expect(
+    await new State(
+      {},
+      { badges: { badges: [], github: 'TEST', name: 'AWD', repo: 'ga' } },
+      ''
+    ).getConfigSection('badges')
+  ).toStrictEqual({ badges: [], github: 'TEST', name: 'AWD', repo: 'ga' });
+});

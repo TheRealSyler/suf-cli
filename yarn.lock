@@ -2392,10 +2392,10 @@ jest-snapshot@^26.6.2:
     pretty-format "^26.6.2"
     semver "^7.3.2"
 
-jest-store-log@^1.1.1:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/jest-store-log/-/jest-store-log-1.2.0.tgz#89fc744fc659c1caae2d0054067891dfc8a0c89d"
-  integrity sha512-a09DeCUW6txLvDqNzUqZcQpf2YlOLbTN598aZvUGb6g5qv/0EjrpL4vxJyX6Ns+Xg+MYnRDK6eedn2s2jh4ozA==
+jest-store-log@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/jest-store-log/-/jest-store-log-1.3.0.tgz#5232c104c984dcb3a70e51d5b02bdca358c18773"
+  integrity sha512-mvAsb9NKH2FR1y86OG6eyBCVYNE22Y7BqggVTuQNxDr3wDG4hzi+wUdeEyWqqeng05xMLkbmZ6DDHHphmO0m6w==
 
 jest-util@^26.1.0, jest-util@^26.6.2:
   version "26.6.2"

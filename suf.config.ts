@@ -1,4 +1,4 @@
-import { ConfigFile } from './src/Modules';
+import { ConfigFile } from './src/modules';
 
 const config: ConfigFile = {
   badges: {
