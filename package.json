@@ -1,6 +1,6 @@
 {
   "name": "suf-cli",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Utility Cli",
   "main": "./dist/index.js",
   "scripts": {
@@ -17,8 +17,7 @@
     "suf": "./dist/cli.js"
   },
   "files": [
-    "dist/**.js",
-    "dist/**.d.ts"
+    "dist"
   ],
   "repository": {
     "type": "git",

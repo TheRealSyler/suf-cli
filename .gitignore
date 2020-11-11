@@ -4,3 +4,4 @@ tsconfig.tsbuildinfo
 types
 /coverage/
 *.log
+*.tgz
