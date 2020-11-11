@@ -24,7 +24,7 @@ const config: ConfigFile = {
   },
   tsDoc: {
     title: 'Docs',
-    dir: 'types',
+    dir: 'dist',
     out: 'README.md',
     include: ['modules', 'badgeTypes'],
   },

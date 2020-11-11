@@ -6,7 +6,7 @@
     "module": "commonjs",
     "watch": true,
     "declaration": true,
-    "declarationDir": "types",
+    // "declarationDir": "dist",
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
