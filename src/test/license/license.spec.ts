@@ -28,13 +28,13 @@ test('License', async () => {
 
   expect(readFileSync('./LICENSE').toString()).toEqual(`MIT License
 
-Copyright (c) 2020 JOHN DoeIO
+Copyright (c) ${new Date().getFullYear()} JOHN DoeIO
 
 bla bla bla...
 `);
   expect(readFileSync('./README.md').toString())
     .toEqual(`<span id="LICENSE_GENERATION_MARKER_0"></span>
-Copyright (c) 2020 JOHN DoeIO Licensed under the MIT license.
+Copyright (c) ${new Date().getFullYear()} JOHN DoeIO Licensed under the MIT license.
 <span id="LICENSE_GENERATION_MARKER_1"></span>`);
 
   expect(removeNodeStyles(log.logs[0])).toEqual(`${genMessage('License')} README.md`);

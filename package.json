@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "scripts": {
     "prepack": "yarn build && node ./dist/cli.js",
-    "build": "del ./dist && del ./types && tsc -b",
+    "build": "del-cli ./dist && del-cli ./types && tsc -b",
     "watch": "tsc -w",
     "test": "jest --coverage",
     "test:clear": "jest --clearCache",
@@ -26,7 +26,7 @@
   "dependencies": {
     "node-fetch": "^2.6.0",
     "suf-log": "^2.5.3",
-    "suf-node": "^1.1.1"
+    "suf-node": "^1.3.3"
   },
   "devDependencies": {
     "@types/jest": "^26.0.15",

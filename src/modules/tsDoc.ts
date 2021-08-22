@@ -25,7 +25,7 @@ export async function TsDoc(STATE: State) {
   const navLinks: string[] = [];
   for (const path of filesPaths) {
     const fileText = readFileSync(path).toString();
-    const fileName = path.replace(/.*(\/|\\\\)([\w\.-]*)\.d\.ts/, '$2');
+    const fileName = path.replace(/.*(\/|\\\\|\\)([\w\.-]*)\.d\.ts/, '$2');
     let match: RegExpExecArray | null;
     navLinks.push(`#${fileName}`);
     let fileOutput = `\n### ${fileName}\n`;
