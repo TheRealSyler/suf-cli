@@ -56,7 +56,7 @@ export interface BadgeLinkTypes {
   /** Github Repo. */
   github: 'https://github.com/<GITHUB>/<REPO>';
   /** circleCi Repo Pipelines. */
-  circleci: 'https://app.circleci.com/github/<GITHUB>/<REPO>/pipelines';
+  circleci: 'https://app.circleci.com/pipelines/github/<GITHUB>/<REPO>';
   /** Visual Studio marketplace. */
   vscode: 'https://marketplace.visualstudio.com/items?itemName=<VSCODE>';
   /** Bundlephobia Link. */

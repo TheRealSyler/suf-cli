@@ -56,11 +56,9 @@ function addBadge(_badge: Badge, CONFIG: BadgesModuleConfig): string {
   }
 
   if (BADGES[type] || (customBadge && LINKS[link]) || customLink) {
-    return ` [![${customBadge ? 'Custom' : type}](${customBadge ? '' : baseLink}${
-      customBadge ? customBadge : replacePlaceholders(CONFIG, BADGES[type])
-    }${params ? params : ''})](${
-      customLink ? customLink : replacePlaceholders(CONFIG, LINKS[link])
-    })`;
+    return ` [![${customBadge ? 'Custom' : type}](${customBadge ? '' : baseLink}${customBadge ? customBadge : replacePlaceholders(CONFIG, BADGES[type])
+      }${params ? params : ''})](${customLink ? customLink : replacePlaceholders(CONFIG, LINKS[link])
+      })`;
   }
 
   log('info', `Badge: "${split.join(' ')}" is not valid.`);
@@ -132,11 +130,11 @@ const BADGES: BadgeTypes = {
   githubLastCommit: '/github/last-commit/<GITHUB>/<REPO>',
   // badge: '<CUSTOM>',
 };
-
+// https://app.circleci.com/pipelines/github/TheRealSyler/sass-formatter
 const LINKS: BadgeLinkTypes = {
   npm: 'https://www.npmjs.com/package/<NAME>',
   github: 'https://github.com/<GITHUB>/<REPO>',
-  circleci: 'https://app.circleci.com/github/<GITHUB>/<REPO>/pipelines',
+  circleci: 'https://app.circleci.com/pipelines/github/<GITHUB>/<REPO>',
   vscode: 'https://marketplace.visualstudio.com/items?itemName=<VSCODE>',
   bundle: 'https://bundlephobia.com/result?p=<NAME>',
   package: 'https://packagephobia.now.sh/result?p=<NAME>',

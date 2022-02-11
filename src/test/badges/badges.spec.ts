@@ -49,7 +49,7 @@ test('Badges: run cli with b | badges arg', async () => {
 
   expect(readFileSync(filePath).toString()).toEqual(`
 <span id="BADGE_GENERATION_MARKER_0"></span>
-[![circleci](https://img.shields.io/circleci/build/github/ArcA/suf-cli)](https://app.circleci.com/github/ArcA/suf-cli/pipelines) [![codecov](https://codecov.io/gh/ArcA/suf-cli/branch/master/graph/badge.svg?awd)](https://codecov.io/gh/ArcA/suf-cli) [![Custom](Test)](awd)
+[![circleci](https://img.shields.io/circleci/build/github/ArcA/suf-cli)](https://app.circleci.com/pipelines/github/ArcA/suf-cli) [![codecov](https://codecov.io/gh/ArcA/suf-cli/branch/master/graph/badge.svg?awd)](https://codecov.io/gh/ArcA/suf-cli) [![Custom](Test)](awd)
 <span id="BADGE_GENERATION_MARKER_1"></span>`);
   expect(removeNodeStyles(log.logs[0])).toEqual('Badge: [object Object] is an invalid badge type.');
   expect(removeNodeStyles(log.logs[1])).toEqual(`${genMessage('Badges')} ${filePath}`);

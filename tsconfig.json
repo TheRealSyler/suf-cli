@@ -1,8 +1,12 @@
 {
   "compilerOptions": {
     "baseUrl": ".",
-    "paths": { "*": ["types/*"] },
-    "target": "ES6",
+    "paths": {
+      "*": [
+        "types/*"
+      ]
+    },
+    "target": "ES2020",
     "module": "commonjs",
     "watch": true,
     "declaration": true,
@@ -12,5 +16,14 @@
     "strict": true,
     "esModuleInterop": true
   },
-  "exclude": ["dist",  "**/*.spec.ts", "**/*.test.ts", "node_modules", "types", "src/test", "suf.config.ts", "jest.setup.ts" ]
+  "exclude": [
+    "dist",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "node_modules",
+    "types",
+    "src/test",
+    "suf.config.ts",
+    "jest.setup.ts"
+  ]
 }
