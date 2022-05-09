@@ -19,16 +19,19 @@ export async function run() {
       break;
     case 'b':
     case 'badges':
+      STATE.canCreateOrUpdateConfig = true
       await Badges(STATE);
       break;
     case 't':
     case 'ts':
     case 'd.ts':
     case 'docs':
+      STATE.canCreateOrUpdateConfig = true
       await TsDoc(STATE);
       break;
     case 'l':
     case 'license':
+      STATE.canCreateOrUpdateConfig = true
       await License(STATE);
       break;
     case 'h':

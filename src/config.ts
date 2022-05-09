@@ -19,7 +19,7 @@ async function checkConfigExists(): Promise<ConfigExtensions | null> {
   return null;
 }
 
-export async function getConfig(Package: IPackageJson) {
+export async function getConfig(Package: IPackageJson): Promise<{ config: ConfigFile, configPath: string }> {
   const extension = await checkConfigExists();
   if (!extension) {
     log('info', 'No config Found, do you want to create one? ', '[Y/n]');
@@ -135,11 +135,11 @@ async function getLicenseType() {
   process.stdout.write(
     styler(
       'Choose From: ' +
-        JSON.stringify(
-          licenses.map((l) => l.key),
-          null,
-          2
-        ).replace(/[\[\]",]/g, ''),
+      JSON.stringify(
+        licenses.map((l) => l.key),
+        null,
+        2
+      ).replace(/[\[\]",]/g, ''),
       colors.gray
     )
   );

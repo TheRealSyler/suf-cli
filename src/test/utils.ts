@@ -13,8 +13,8 @@ bla bla bla...
   );
 }
 
-export async function writeToStdin(data: string, stdin: NodeJS.Socket) {
-  await new Promise((res) => {
+export async function writeToStdin(data: string, stdin: NodeJS.Socket): Promise<void> {
+  return await new Promise((res) => {
     setTimeout(() => {
       stdin.emit('data', data);
       res();
@@ -22,7 +22,7 @@ export async function writeToStdin(data: string, stdin: NodeJS.Socket) {
   });
 }
 
-export function sleep(n: number) {
+export function sleep(n: number): Promise<void> {
   return new Promise((res) => {
     setTimeout(() => {
       res();

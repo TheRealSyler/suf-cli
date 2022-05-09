@@ -8,7 +8,7 @@ import { resolve } from 'path';
 test('create TsDoc config', async () => {
   process.chdir(__dirname);
   const log = new JestStoreLog({ stdout: true });
-  const state = new State({}, {}, 'suf.config.json');
+  const state = new State({}, {}, 'suf.config.json', true);
   const section = state.getConfigSection('tsDoc');
   const filePath = 'suf.config.json';
   writeFileSync(filePath, '');
