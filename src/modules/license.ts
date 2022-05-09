@@ -9,7 +9,7 @@ export async function License(STATE: State) {
 
   if (!CONFIG) return;
 
-  const license = await (await fetch(`https://api.github.com/licenses/${CONFIG.type}`)).json();
+  const license = await (await fetch(`https://api.github.com/licenses/${CONFIG.type}`)).json() as any;
   const OUT = CONFIG.out || 'README.md';
   const FILE = CONFIG.file || 'LICENSE';
   const YEAR = CONFIG.year ? CONFIG.year : new Date().getFullYear();
