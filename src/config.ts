@@ -131,7 +131,7 @@ const configFuncs: TGetConfigFuncs = {
 
 async function getLicenseType() {
   process.stdout.write(styler('Getting Licenses from api...\n', colors.gray));
-  const licenses: any[] = await (await fetch('https://api.github.com/licenses')).json();
+  const licenses: any[] = await (await fetch('https://api.github.com/licenses')).json() as any[];
   process.stdout.write(
     styler(
       'Choose From: ' +
