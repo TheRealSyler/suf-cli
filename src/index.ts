@@ -1,2 +1,5 @@
-export * from './modules';
-export * from './run';
+#!/usr/bin/env node
+
+import { run } from './run';
+
+run()

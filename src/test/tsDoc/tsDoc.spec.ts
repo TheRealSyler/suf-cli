@@ -56,7 +56,7 @@ test('TsDoc: run cli with (t | ts | d.ts | docs) arg', async () => {
 `)
   );
 
-  expect(removeNodeStyles(log.logs[0])).toEqual(`${genMessage('TsDoc')} ${filePath}`);
+  expect(removeNodeStyles(log.logs[1])).toEqual(`${genMessage('TsDoc')} ${filePath}`);
 
   log.restore();
 });

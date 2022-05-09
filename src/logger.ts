@@ -3,7 +3,8 @@ import { Log, styler, LogStyle } from 'suf-log';
 export const colors = {
   info: '#f64',
   yellow: '#fc2',
-  blue: '#08f',
+  blue: '#2af',
+  red: '#f26',
   gray: '#aaa',
   error: '#f00',
 };
@@ -14,14 +15,17 @@ const loggers = {
   info: {
     styles: [colors.info, colors.yellow],
   },
+  intro: {
+    styles: [colors.red, colors.blue],
+  },
   error: {
     styles: [{ color: colors.error, 'font-weight': 'bold' }] as LogStyle[],
   },
   help: {
     styles: [
       { color: '#72a', background: '#111' },
-      { color: '#f23', background: '#222' },
-      { color: '#2af', background: '#222' },
+      { color: colors.red, background: '#222' },
+      { color: colors.blue, background: '#222' },
     ],
   },
 };
@@ -44,11 +48,7 @@ export function log(type: keyof typeof loggers, ...messages: string[]) {
           secondColumnWidth: 90,
         },
         {
-          styles: [
-            { color: '#72a', background: '#111' },
-            { color: '#f23', background: '#222' },
-            { color: '#2af', background: '#222' },
-          ],
+          styles: loggers.help,
           rawMessages: [],
         }
       )

@@ -19,7 +19,7 @@ test('cli: read Config no arg (default)', async () => {
 
   await run();
 
-  testAll(log, filePath);
+  testAll(log, filePath, 'SUF Cli (default, All Modules)');
 
   log.restore();
 });
@@ -40,13 +40,14 @@ test('cli: read Config all arg', async () => {
 
   await run();
 
-  testAll(log, filePath);
+  testAll(log, filePath, 'SUF Cli (All Modules)');
 
   log.restore();
 });
 
-function testAll(log: JestStoreLog, filePath: string) {
+function testAll(log: JestStoreLog, filePath: string, modules: string) {
   expect(log.logs.map((v) => removeNodeStyles(v))).toStrictEqual([
+    modules,
     `${genMessage('Badges')} ${filePath}`,
     `${genMessage('TsDoc')} ${filePath}`,
     `${genMessage('License')} ${filePath}`,

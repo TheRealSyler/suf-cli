@@ -19,6 +19,7 @@ test('cli: only license module', async () => {
   await run();
 
   expect(log.all.map((v) => removeNodeStyles(v))).toStrictEqual([
+    "SUF Cli (default, All Modules)",
     "Generated License at: README.md",
     "Generated License at: LICENSE",
   ])

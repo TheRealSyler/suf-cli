@@ -48,7 +48,13 @@ export async function getConfig(Package: IPackageJson): Promise<{ config: Config
           const transpileModule = (await import('typescript')).transpileModule;
           const text = (await promises.readFile(configPath('ts'))).toString();
 
-          const config = eval(transpileModule(text, {}).outputText);
+          const funcText = transpileModule(text, {}).outputText.replace(
+            `Object.defineProperty(exports, "__esModule", { value: true });`
+            , "const exports = {default: {}}") + "\nreturn exports.default"
+
+
+          const config = Function(funcText)();
+
           if (!config) {
             log('error', `${configPath('ts')} export is invalid.`);
             process.exit(1);

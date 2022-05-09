@@ -51,8 +51,8 @@ test('Badges: run cli with b | badges arg', async () => {
 <span id="BADGE_GENERATION_MARKER_0"></span>
 [![circleci](https://img.shields.io/circleci/build/github/ArcA/suf-cli)](https://app.circleci.com/pipelines/github/ArcA/suf-cli) [![codecov](https://codecov.io/gh/ArcA/suf-cli/branch/master/graph/badge.svg?awd)](https://codecov.io/gh/ArcA/suf-cli) [![Custom](Test)](awd)
 <span id="BADGE_GENERATION_MARKER_1"></span>`);
-  expect(removeNodeStyles(log.logs[0])).toEqual('Badge: [object Object] is an invalid badge type.');
-  expect(removeNodeStyles(log.logs[1])).toEqual(`${genMessage('Badges')} ${filePath}`);
+  expect(removeNodeStyles(log.logs[1])).toEqual('Badge: [object Object] is an invalid badge type.');
+  expect(removeNodeStyles(log.logs[2])).toEqual(`${genMessage('Badges')} ${filePath}`);
 
   log.restore();
 });

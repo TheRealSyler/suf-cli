@@ -8,8 +8,7 @@ test('cli: help', async () => {
   const log = new JestStoreLog();
   await run();
 
-  expect(removeNodeStyles(log.logs[0]).replace(/ +/g, '-')).toEqual(`
--
+  expect(removeNodeStyles(log.logs[1]).replace(/ +/g, '-')).toEqual(`-
 -INFO-All-arguments-can-start-with---or---,-but-i-would-recommend-to-just-use-letters.-
 -a-|-all-Calls-all-modules.-
 -b-|-badges-Calls-the-badges-module.-
@@ -17,4 +16,6 @@ test('cli: help', async () => {
 -l-|-licence-Calls-the-license-module.-
 -h-|-help-Displays-this-Message.-
 -`);
+  log.restore()
+
 });

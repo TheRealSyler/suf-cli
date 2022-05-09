@@ -70,8 +70,8 @@ bla bla bla...
 <span id="LICENSE_GENERATION_MARKER_0"></span>
 Copyright (c) 3245 JESUS Licensed under the MIT license.
 <span id="LICENSE_GENERATION_MARKER_1"></span>`);
-  expect(removeNodeStyles(log.logs[0])).toEqual(`${genMessage('License')} LICENSE.md`);
-  expect(removeNodeStyles(log.logs[1])).toEqual(`${genMessage('License')} LICENSE_2`);
+  expect(removeNodeStyles(log.logs[1])).toEqual(`${genMessage('License')} LICENSE.md`);
+  expect(removeNodeStyles(log.logs[2])).toEqual(`${genMessage('License')} LICENSE_2`);
 
   log.restore();
 });
