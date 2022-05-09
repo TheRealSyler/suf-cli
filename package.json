@@ -16,7 +16,8 @@
     "suf": "./dist/index.js"
   },
   "files": [
-    "dist"
+    "dist/src",
+    "dist/index.js"
   ],
   "repository": {
     "type": "git",
