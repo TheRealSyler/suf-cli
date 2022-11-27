@@ -1,4 +1,4 @@
-import { BadgeTypes, BadgeLinkTypes } from './badgeTypes';
+import { BadgeLinkTypes, BadgeTypes } from './modules/badges';
 
 export interface BadgesModuleConfig {
   /**package name */
@@ -20,7 +20,7 @@ export interface BadgesModuleConfig {
   badges: (
     | [keyof BadgeTypes, keyof BadgeLinkTypes, string]
     | [keyof BadgeTypes, keyof BadgeLinkTypes]
-    | string
+    | `${keyof BadgeTypes} ${keyof BadgeLinkTypes}`
   )[];
 
   /**link to external config,(not sure if this still works) */

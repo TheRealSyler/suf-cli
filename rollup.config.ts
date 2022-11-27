@@ -1,14 +1,29 @@
-import typescript from '@rollup/plugin-typescript';
-import hashbang from "rollup-plugin-hashbang";
 import { RollupOptions } from "rollup";
+import dts from "rollup-plugin-dts";
+import hashbang from "rollup-plugin-hashbang";
+import { swc } from 'rollup-plugin-swc3';
 
-const bundle: RollupOptions = {
-  input: 'src/index.ts',
-  output: {
-    dir: './dist',
-    format: 'cjs'
+const configs: RollupOptions[] = [
+  {
+    input: [
+      "src/cli.ts",
+      "src/index.ts",
+    ],
+    output: {
+      dir: './dist',
+      format: 'cjs'
+    },
+    external: ["fs", "suf-node", "path", "suf-log", "node-fetch", "typescript"],
+    plugins: [swc(), hashbang()]
   },
-  external: ["fs", "suf-node", "path", "suf-log", "node-fetch", "typescript"],
-  plugins: [typescript(), hashbang()]
-}
-export default bundle
+  {
+    input: 'src/index.ts',
+    output: {
+      dir: './dist',
+      format: 'cjs'
+    },
+    external: ["fs", "suf-node", "path", "suf-log", "node-fetch", "typescript"],
+    plugins: [dts()]
+  }
+]
+export default configs

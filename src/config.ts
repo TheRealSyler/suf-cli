@@ -1,10 +1,10 @@
-import { colors, log } from './logger';
 import { promises } from 'fs';
-import { styler } from 'suf-log';
-import { getYNAnswer, Exits, readConsole } from 'suf-node';
-import { IPackageJson } from 'package-json-type';
 import fetch from 'node-fetch';
-import { ConfigFile, BadgesModuleConfig, TsDocModuleConfig, LicenseModuleConfig } from './modules';
+import { IPackageJson } from 'package-json-type';
+import { styler } from 'suf-log';
+import { Exits, getYNAnswer, readConsole } from 'suf-node';
+import { colors, log } from './logger';
+import { BadgesModuleConfig, ConfigFile, LicenseModuleConfig, TsDocModuleConfig } from './modules';
 import { State } from './state';
 
 type ConfigExtensions = 'ts' | 'json';
@@ -62,7 +62,7 @@ export async function getConfig(Package: IPackageJson): Promise<{ config: Config
           return { config: config || {}, configPath: configPath('ts') };
         } catch (e) {
           console.log(e);
-          log('error', 'Please install typescript or use a .json config file!');
+          log('error', 'Please install typescript or use a json config file!');
           process.exit(1);
         }
     }
@@ -74,8 +74,8 @@ export async function createOrUpdateConfig(
   type?: keyof ConfigFile,
   STATE?: State
 ) {
-  const path = STATE?.configPath || configPath('json');
-  if (!path.endsWith('.json')) return undefined;
+  const path = STATE?.configPath || configPath('ts');
+  if (!path.endsWith('.ts')) return undefined;
   let config: ConfigFile;
   let updateOrCreate = 'Update';
 
@@ -98,7 +98,11 @@ export async function createOrUpdateConfig(
   }
 
   console.log(`${styler(`${updateOrCreate} Config`, colors.blue)}: ${path}`);
-  promises.writeFile(path, JSON.stringify(config, null, 2));
+  promises.writeFile(path, `import { FileConfig } from 'suf-cli'
+
+const config: FileConfig = ${JSON.stringify(config, null, 2).replace(/"(.*)":/, '$1:')}
+
+export default config`);
   return config;
 }
 type TGetConfigFuncs = {
@@ -114,7 +118,7 @@ const configFuncs: TGetConfigFuncs = {
       github: await getInp('Github', 'Username'),
       repo: await getInp('Github', 'Repo', Package.name || ''),
       out: await getInp('out', 'OUTPUT PATH', 'README.md'),
-      badges: [...(await getBadges())],
+      badges: [...(await getBadges() as any)],
     };
   },
   tsDoc: async () => {

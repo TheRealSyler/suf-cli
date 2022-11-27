@@ -1,18 +1,19 @@
-import { State } from '../../state';
-import JestStoreLog from 'jest-store-log';
-import { removeNodeStyles } from 'suf-log';
 import { readFileSync, writeFileSync } from 'fs';
-import { sleep, writeToStdin } from '../utils';
+import JestStoreLog from 'jest-store-log';
 import { resolve } from 'path';
+import { removeNodeStyles } from 'suf-log';
+import { State } from '../../state';
+import { sleep, writeToStdin } from '../utils';
 
 test('create TsDoc config', async () => {
   process.chdir(__dirname);
   const log = new JestStoreLog({ stdout: true });
-  const state = new State({}, {}, 'suf.config.json', true);
-  const section = state.getConfigSection('tsDoc');
-  const filePath = 'suf.config.json';
-  writeFileSync(filePath, '');
-  expect(readFileSync(filePath).toString()).toEqual('');
+  const filePath = 'suf.config.ts';
+  const state = new State({}, {}, filePath, true);
+  const section = state.getConfigSection('tsDoc')
+  const emptyConfig = 'export default {}';
+  writeFileSync(filePath, emptyConfig);
+  expect(readFileSync(filePath).toString()).toEqual(emptyConfig);
 
   const stdin = process.openStdin();
 
@@ -35,16 +36,20 @@ test('create TsDoc config', async () => {
     ' OUTPUT PATH',
     ': ',
     '(README.md)',
-    'Update Config: suf.config.json',
+    'Update Config: suf.config.ts',
   ]);
 
   await sleep(1);
 
-  expect(JSON.parse(readFileSync(resolve('suf.config.json')).toString())).toStrictEqual({
-    tsDoc: {
-      dir: 'awd',
-      out: 'test.md',
-      title: 'BEST TITLE',
-    },
-  });
+  expect(readFileSync(resolve(filePath)).toString()).toStrictEqual(`import { FileConfig } from 'suf-cli'
+
+const config: FileConfig = {
+  tsDoc: {
+    "title": "BEST TITLE",
+    "dir": "awd",
+    "out": "test.md"
+  }
+}
+
+export default config`);
 });

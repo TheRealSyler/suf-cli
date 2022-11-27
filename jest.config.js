@@ -5,7 +5,10 @@ module.exports = {
   setupFiles: [
     "./jest.setup.ts"
   ],
-  modulePathIgnorePatterns: ["<rootDir>/src/test/state/suf.config.json"],
+  modulePathIgnorePatterns: [
+    "<rootDir>/src/test/state/suf.config.json",
+    "<rootDir>/src/test/createTsDocConfig/suf.config.ts",
+  ],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },

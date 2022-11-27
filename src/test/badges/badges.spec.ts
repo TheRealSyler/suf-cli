@@ -1,10 +1,10 @@
 import { readFileSync, writeFileSync } from 'fs';
-import { State } from '../../state';
-import { Badges } from '../../modules/badges';
 import { JestStoreLog } from 'jest-store-log';
-import { removeNodeStyles } from 'suf-log/dist/utils';
+import { removeNodeStyles } from 'suf-log';
 import { genMessage } from '../../logger';
+import { Badges } from '../../modules/badges';
 import { run } from '../../run';
+import { State } from '../../state';
 
 test('Badges', async () => {
   process.chdir(__dirname);
@@ -19,7 +19,7 @@ test('Badges', async () => {
           github: 'TheRealSyler',
           repo: 'suf-cli',
           out: outFilePath,
-          badges: ['npmV npm', 'min bundle', 'install package', 'githubLastCommit github', 'awd'],
+          badges: ['npmV npm', 'min bundle', 'install package', 'githubLastCommit github', 'awd' as any],
         },
       },
       'NO_CONFIG_FILE'

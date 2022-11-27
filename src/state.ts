@@ -1,5 +1,5 @@
-import { createOrUpdateConfig } from './config';
 import { IPackageJson } from 'package-json-type';
+import { createOrUpdateConfig } from './config';
 import { ConfigFile } from './modules';
 
 export class State {
