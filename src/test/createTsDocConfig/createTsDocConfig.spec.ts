@@ -39,15 +39,15 @@ test('create TsDoc config', async () => {
     'Update Config: suf.config.ts',
   ]);
 
-  await sleep(1);
+  await sleep(10);
 
-  expect(readFileSync(resolve(filePath)).toString()).toStrictEqual(`import { FileConfig } from 'suf-cli'
+  expect(readFileSync(resolve(filePath)).toString()).toStrictEqual(`import { ConfigFile } from 'suf-cli'
 
-const config: FileConfig = {
+const config: ConfigFile = {
   tsDoc: {
-    "title": "BEST TITLE",
-    "dir": "awd",
-    "out": "test.md"
+    title: "BEST TITLE",
+    dir: "awd",
+    out: "test.md"
   }
 }
 

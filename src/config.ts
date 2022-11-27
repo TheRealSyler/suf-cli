@@ -98,9 +98,9 @@ export async function createOrUpdateConfig(
   }
 
   console.log(`${styler(`${updateOrCreate} Config`, colors.blue)}: ${path}`);
-  promises.writeFile(path, `import { FileConfig } from 'suf-cli'
+  promises.writeFile(path, `import { ConfigFile } from 'suf-cli'
 
-const config: FileConfig = ${JSON.stringify(config, null, 2).replace(/"(.*)":/, '$1:')}
+const config: ConfigFile = ${JSON.stringify(config, null, 2).replace(/^( *)"(.*)":/gm, '$1$2:')}
 
 export default config`);
   return config;
